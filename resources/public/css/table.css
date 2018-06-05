@@ -1,0 +1,24 @@
+th{
+    border-style: solid;
+    border-color: #000000;
+    background-color: #7FFF00;
+    color: #A52A2A;
+
+}
+
+tr{
+    text-align: center;
+}
+
+td{
+    border-style: solid;
+    border-color: #000000;
+    background-color: #A9A9A9;
+    color: #8B0000;
+    text-align: center;
+}
+
+table{
+    position: relative;
+
+}
