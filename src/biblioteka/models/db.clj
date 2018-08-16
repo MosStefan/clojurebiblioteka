@@ -23,79 +23,152 @@
              :user        "root"
              :password    ""})
 
-(defn select-books []
+(defn select-authors []
   (try
     (into [] (j/with-db-transaction [t-con db-map]
-                                    (j/query db-map ["SELECT * FROM publikacija order by godinaizdanja asc"]
+                                    (j/query db-map ["SELECT * FROM autor order by datumrodjenja asc"]
                                              )))
     (catch Exception e
       (throw (Exception. e))))
   )
 
-(defn insert-book [name typepublication year nameauthor numberofexample ]
+(defn select-authors-order-surname []
+  (try
+    (into [] (j/with-db-transaction [t-con db-map]
+                                    (j/query db-map ["SELECT * FROM autor order by prezimeautora asc"]
+                                             )))
+    (catch Exception e
+      (throw (Exception. e))))
+  )
+
+(defn insert-author [name surname dateofbirth country mainbook]
 
   (j/with-db-transaction [t-con db-map]
                          (try
                            (j/db-unset-rollback-only! t-con)
                            (j/insert! t-con
-                                      :publikacija {:nazivpublikacije name :tippublikacije typepublication :godinaizdanja year
-                                                      :imeautora nameauthor :brojprimeraka numberofexample })
+                                      :autor {:imeautora name :prezimeautora surname :datumrodjenja dateofbirth
+                                                      :zemljaporekla country :najznacajnijedelo mainbook})
                            (catch Exception e
                              (j/db-set-rollback-only! t-con)
                              (throw (Exception. e))
                              ))))
 
 
-(defn select-book-by-name [namebook]
+(defn select-author-by-surname [surname]
   (try
     (j/with-db-transaction [t-con db-map]
-                           (j/query db-map ["SELECT * FROM publikacija WHERE nazivpublikacije=?" namebook]
+                           (j/query db-map ["SELECT * FROM autor WHERE prezimeautora=?" surname]
                                     ))
     (catch Exception e
       (throw (Exception. "Dogodila se greska!"))))
   )
 
-(defn select-book-by-id [id]
+(defn select-author-by-id [id]
   (try
     (into [] (j/with-db-transaction [t-con db-map]
-                                    (j/query db-map ["SELECT * FROM publikacija WHERE publikacijaid=?" id]
+                                    (j/query db-map ["SELECT * FROM autor WHERE autorid=?" id]
                                              )))
 
     (catch Exception e
       (throw (Exception. "Dogodila se greska!"))))
   )
 
+(defn delete-author [id]
+  (j/with-db-transaction [t-con db-map]
+                         (try
+                           (j/db-unset-rollback-only! t-con)
+                           (j/execute! t-con
+                                       ["DELETE FROM autor WHERE autorid=?" id])
+                           (catch Exception e
+                             (j/db-set-rollback-only! t-con)
+                             (throw (Exception. e))
+                             )))
+  )
+
+(defn delete-autor-by-surname [surname]
+  (j/with-db-transaction [t-con db-map]
+                         (try
+                           (j/db-unset-rollback-only! t-con)
+                           (j/execute! t-con
+                                       ["DELETE FROM autor WHERE prezimeautora=?" surname])
+                           (catch Exception e
+                             (j/db-set-rollback-only! t-con)
+                             (throw (Exception. e))
+                             )))
+  )
+
+(defn update-author [autorid name surname dateofbirth country mainbook]
+  (j/with-db-transaction [t-con db-map]
+                         (try
+                           (j/db-unset-rollback-only! t-con)
+                           (j/execute! t-con
+                                       ["UPDATE autor SET imeautora=?, prezimeautora=?, datumrodjenja=?, zemljaporekla=?, najznacajnijedelo=?
+                                      WHERE autorid=? " name surname dateofbirth country mainbook autorid]
+                                       )
+                           (catch Exception e
+                             (j/db-set-rollback-only! t-con)
+                             (throw (Exception. e))
+                             )))
+  )
+
+(defn select_books [surnameAuthor]
+  (try
+    (into [] (j/with-db-transaction [t-con db-map]
+                                    (j/query db-map ["SELECT * FROM autor a INNER JOIN publikacija p ON a.autorid=p.autorid WHERE prezimeautora=?" surnameAuthor]
+                                             )))
+    (catch Exception e
+      (throw (Exception. "Dogodila se greska!"))))
+
+  )
+
 (defn delete-book [id]
   (j/with-db-transaction [t-con db-map]
                          (try
+
                            (j/db-unset-rollback-only! t-con)
                            (j/execute! t-con
-                                       ["DELETE FROM publikacija WHERE publikacijaid=?" id])
+                                       ["DELETE FROM publikacija WHERE idpublikacije=?" id])
                            (catch Exception e
                              (j/db-set-rollback-only! t-con)
                              (throw (Exception. e))
                              )))
   )
 
-(defn delete-book-by-name [namebook]
+
+(defn insert-book [namebook typeofbook year numberofexample author]
   (j/with-db-transaction [t-con db-map]
                          (try
                            (j/db-unset-rollback-only! t-con)
-                           (j/execute! t-con
-                                       ["DELETE FROM publikacija WHERE nazivpublikacije=?" namebook])
+                           (j/insert! t-con
+                                      :publikacija {:nazivpublikacije namebook :tippublikacije typeofbook :godinaizdanja year
+                                              :brojprimeraka numberofexample :autorid author})
+
                            (catch Exception e
                              (j/db-set-rollback-only! t-con)
                              (throw (Exception. e))
                              )))
   )
 
-(defn update-book [bookid name typepublication year nameauthor numberofexample ]
+(defn select-book-by-id [id]
+  (try
+    (into [] (j/with-db-transaction [t-con db-map]
+                                    (j/query db-map ["SELECT * FROM autor a INNER JOIN publikacija p ON a.autorid=p.autorid WHERE idpublikacije=?" id]
+                                             )))
+    (catch Exception e
+      (throw (Exception. "Dogodila se greska!"))))
+
+  )
+
+
+(defn update-book [id namebook typeofbook year numberofexample author]
   (j/with-db-transaction [t-con db-map]
                          (try
+
                            (j/db-unset-rollback-only! t-con)
                            (j/execute! t-con
-                                       ["UPDATE publikacija SET nazivpublikacije=?, tippublikacije=?, godinaizdanja=?, imeautora=?, brojprimeraka=?
-                                      WHERE publikacijaid=? " name typepublication year nameauthor numberofexample bookid]
+                                       ["UPDATE publikacija SET nazivpublikacije=?, tippublikacije=?, godinaizdanja=?, brojprimeraka=?, autorid=?
+                                        WHERE idpublikacije=? " namebook typeofbook year numberofexample author id]
                                        )
                            (catch Exception e
                              (j/db-set-rollback-only! t-con)

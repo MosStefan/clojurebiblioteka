@@ -18,7 +18,7 @@
 
 (defn menuapp []
   [:nav {:class "navbar navbar-expand-lg navbar-light bg-light"}
-   [:a {:class "navbar-brand" :href "/"} "Pocetna"]
+   [:a {:class "navbar-brand" :href "/"} "HOME PAGE"]
    [:button {:type "button" :class "navbar-toggler" :data-toggle "collapse"
              :data-target "#navbarNavDropdown" :aria-expanded "false" :aria-controls "navbarNavDropdown"
              :aria-label "Toggle navigation"}
@@ -26,11 +26,17 @@
    [:div {:class "collapse navbar-collapse" :id "navbarNavDropdown"}
     [:ul {:class "navbar-nav"}
      [:li {:class "nav-item dropdown"}
-      [:a {:class "nav-link dropdown-toggle" :href "/books" :id "navbarDropdownMenuLink" :data-toggle "dropdown" :aria-hashpopup "true" :aria-expanded "false"} "Publikacije"]
+      [:a {:class "nav-link dropdown-toggle" :href "/authors" :id "navbarDropdownMenuLink" :data-toggle "dropdown" :aria-hashpopup "true" :aria-expanded "false"} "AUTHORS"]
       [:div {:class "dropdown-menu" :aria-labelledby "navbarDropdownMenuLink"}
-       [:a {:class "dropdown-item" :href "/showBooks"} "Prikazi publikacije"]
-       [:a {:class "dropdown-item" :href "/insertBook"} "Unesi publikaciju"]
-       [:a {:class "dropdown-item" :href "/deleteBook"} "Obrisi publikaciju"]
+       [:a {:class "dropdown-item" :href "/showAuthors"} "Prikazi autore"]
+       [:a {:class "dropdown-item" :href "/insertAuthor"} "Unesi novog autora"]
+       [:a {:class "dropdown-item" :href "/deleteAuthor"} "Obrisi autora"]
+       ]]
+     [:li {:class "nav-item dropdown"}
+      [:a {:class "nav-link dropdown-toggle" :href "/books" :id "navbarDropdownMenuLink" :data-toggle "dropdown" :aria-hashpopup "true" :aria-expanded "false"} "PUBLICATIONS"]
+      [:div {:class "dropdown-menu" :aria-labelledby "navbarDropdownMenuLink"}
+       [:a {:class "dropdown-item" :href "/showBooks"} "Prikazi knjige"]
+       [:a {:class "dropdown-item" :href "/insertBook"} "Unesi novu knjigu"]
        ]]
      ]
     ]])

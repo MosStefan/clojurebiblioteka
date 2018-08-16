@@ -10,6 +10,7 @@
                  [ring/ring-core "1.6.1"]
                  [org.clojure/java.jdbc "0.7.6"]
                  [mysql/mysql-connector-java "5.1.18"]
+                 [clj-time "0.6.0"]
                  [org.clojure/clojure-contrib "1.2.0"]
                  [hiccup-table "0.2.0"]
                  [hiccup-bootstrap "0.1.2"]]
