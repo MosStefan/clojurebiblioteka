@@ -41,6 +41,7 @@
     <orderEntry type="library" name="Leiningen: org.eclipse.jetty/jetty-io:9.2.21.v20170120" level="project" />
     <orderEntry type="library" name="Leiningen: org.eclipse.jetty/jetty-server:9.2.21.v20170120" level="project" />
     <orderEntry type="library" name="Leiningen: org.eclipse.jetty/jetty-util:9.2.21.v20170120" level="project" />
+    <orderEntry type="library" name="Leiningen: propertea:1.2.3" level="project" />
     <orderEntry type="library" name="Leiningen: ring/ring-anti-forgery:1.0.1" level="project" />
     <orderEntry type="library" name="Leiningen: ring/ring-codec:1.0.1" level="project" />
     <orderEntry type="library" name="Leiningen: ring/ring-core:1.6.1" level="project" />

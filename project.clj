@@ -11,9 +11,11 @@
                  [org.clojure/java.jdbc "0.7.6"]
                  [mysql/mysql-connector-java "5.1.18"]
                  [clj-time "0.6.0"]
+                 [propertea "1.2.3"]
                  [org.clojure/clojure-contrib "1.2.0"]
                  [hiccup-table "0.2.0"]
-                 [hiccup-bootstrap "0.1.2"]]
+                 [hiccup-bootstrap "0.1.2"]
+                 ]
   :plugins [[lein-ring "0.9.7"]]
   :ring {:handler biblioteka.handler/app}
   :profiles

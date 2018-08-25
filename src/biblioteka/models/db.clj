@@ -64,6 +64,24 @@
       (throw (Exception. "Dogodila se greska!"))))
   )
 
+(defn select-author-by-name [surname book]
+  (try
+    (j/with-db-transaction [t-con db-map]
+                           (j/query db-map ["SELECT * FROM nagradna_igra WHERE prezimeautora=? AND najpoznatijedelo=?" surname book]
+                                    ))
+    (catch Exception e
+      (throw (Exception. "Dogodila se greska!"))))
+  )
+
+(defn select-authors-random []
+  (try
+    (j/with-db-transaction [t-con db-map]
+                           (j/query db-map ["SELECT * FROM nagradna_igra ORDER BY RAND() LIMIT 5"]
+                                    ))
+    (catch Exception e
+      (throw (Exception. "Dogodila se greska!"))))
+  )
+
 (defn select-author-by-id [id]
   (try
     (into [] (j/with-db-transaction [t-con db-map]
@@ -116,6 +134,15 @@
   (try
     (into [] (j/with-db-transaction [t-con db-map]
                                     (j/query db-map ["SELECT * FROM autor a INNER JOIN publikacija p ON a.autorid=p.autorid WHERE prezimeautora=?" surnameAuthor]
+                                             )))
+    (catch Exception e
+      (throw (Exception. "Dogodila se greska!"))))
+
+  )
+(defn select-books-order-name []
+  (try
+    (into [] (j/with-db-transaction [t-con db-map]
+                                    (j/query db-map ["SELECT * FROM autor a INNER JOIN publikacija p ON a.autorid=p.autorid order by nazivpublikacije asc"]
                                              )))
     (catch Exception e
       (throw (Exception. "Dogodila se greska!"))))

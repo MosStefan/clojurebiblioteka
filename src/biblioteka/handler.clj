@@ -18,10 +18,14 @@
             [ring.util.response :refer [redirect]]
             [biblioteka.views.layout :as layout]
             [biblioteka.views.menu :as menu]
-            [biblioteka.models.db :as db]))
+            [biblioteka.models.db :as db])
+  (require [propertea.core :refer (read-properties)]))
+
 
  (defn anti-forgery-field []
 (f/hidden-field "__anti-forgery-token" *anti-forgery-token*))
+
+(def props (read-properties "src/autori.properties"))
 
 ; POCETNA STRANA
 (defn index []
@@ -1134,6 +1138,270 @@
                   ])
   )
 
+(defn pick-author []
+  (layout/pagelayout "Biblioteka" (menu/menuapp)
+                 [:br]
+                 [:div {:class "container"}
+                  [:div {:class "row"}
+                   [:div {:class "col"}]
+                   [:div {:class "col-6"}
+                    [:h3  [:marquee [:b "Pogodi autora za datu knjigu"]] ]
+                    [:br]
+                    (try
+                      [:div {:class "tab-content" }
+                       [:div {:class "tab-pane active" :role "tabpanel"}
+                        (f/form-to [:get (str "/pickTheAuthor")]
+                                   (anti-forgery-field)
+                                   [:div {:class "form-group"}
+                                    [:input {:type "text" :name "first" :style "color:red; border-color:red;" :readonly "true" :value (props :prvi)}] (h "                   ")
+                                    [:select {:name "book1" :class ""}
+                                     [:option {:value ""} "Izaberi knjigu"]
+                                     [:option {:value "RatiMir"} "Rat i mir"]
+                                     [:option {:value "NaDriniCuprija"} "Na Drini Cuprija"]
+                                     [:option {:value "RomeoIJulija"} "Romeo i Julija"]
+                                     [:option {:value "BozanstvenaKomedija"} "Bozanstvena komedija"]
+                                     [:option {:value "DonKihot"} "Don Kihot"]
+                                     ]
+                                    ]
+                                   [:div {:class "form-group"}
+                                    [:input {:type "text" :name "first1" :style "color:red; border-color:red;" :readonly "true" :value (props :prvi)}] (h "                   ")
+                                    [:select {:name "year1" :class ""}
+                                     [:option {:value ""} "Izaberi godinu izdanja"]
+                                     [:option {:value "1956"} "1956"]
+                                     [:option {:value "1954"} "1954"]
+                                     [:option {:value "1267"} "1267"]
+                                     [:option {:value "1898"} "1898"]
+                                     [:option {:value "1569"} "1569"]
+                                     ]
+                                    ]
+                                   [:br]
+                                   [:div {:class "form-group"}
+                                    [:input {:type "text" :name "second" :style "color:red; border-color:red;" :readonly "true" :value (props :drugi)}] (h "                   ")
+                                    [:select {:name "book2" :class ""}
+                                     [:option {:value ""} "Izaberi knjigu"]
+                                     [:option {:value "RatiMir"} "Rat i mir"]
+                                     [:option {:value "NaDriniCuprija"} "Na Drini Cuprija"]
+                                     [:option {:value "RomeoIJulija"} "Romeo i Julija"]
+                                     [:option {:value "BozanstvenaKomedija"} "Bozanstvena komedija"]
+                                     [:option {:value "DonKihot"} "Don Kihot"]]
+                                    ]
+                                   [:br]
+                                   [:div {:class "form-group"}
+                                    [:input {:type "text" :name "second2" :style "color:red; border-color:red;" :readonly "true" :value (props :prvi)}] (h "                   ")
+                                    [:select {:name "year2" :class ""}
+                                     [:option {:value ""} "Izaberi godinu izdanja"]
+                                     [:option {:value "1956"} "1956"]
+                                     [:option {:value "1954"} "1954"]
+                                     [:option {:value "1267"} "1267"]
+                                     [:option {:value "1898"} "1898"]
+                                     [:option {:value "1569"} "1569"]
+                                     ]
+                                    ]
+
+                                   [:div {:class "form-group"}
+                                    [:input {:type "text" :name "third" :style "color:red; border-color:red;" :readonly "true" :value (props :treci)}] (h "                   ")
+                                    [:select {:name "book3" :class ""}
+                                     [:option {:value ""} "Izaberi knjigu"]
+                                     [:option {:value "RatiMir"} "Rat i mir"]
+                                     [:option {:value "NaDriniCuprija"} "Na Drini Cuprija"]
+                                     [:option {:value "RomeoIJulija"} "Romeo i Julija"]
+                                     [:option {:value "BozanstvenaKomedija"} "Bozanstvena komedija"]
+                                     [:option {:value "DonKihot"} "Don Kihot"]]
+                                    ]
+                                   [:br]
+                                   [:div {:class "form-group"}
+                                    [:input {:type "text" :name "third3" :style "color:red; border-color:red;" :readonly "true" :value (props :prvi)}] (h "                   ")
+                                    [:select {:name "year3" :class ""}
+                                     [:option {:value ""} "Izaberi godinu izdanja"]
+                                     [:option {:value "1956"} "1956"]
+                                     [:option {:value "1954"} "1954"]
+                                     [:option {:value "1267"} "1267"]
+                                     [:option {:value "1898"} "1898"]
+                                     [:option {:value "1569"} "1569"]
+                                     ]
+                                    ]
+                                   [:div {:class "form-group"}
+                                    [:input {:type "text" :name "fourth" :style "color:red; border-color:red;" :readonly "true" :value (props :cetvrti)}] (h "                   ")
+                                    [:select {:name "book4" :class ""}
+                                     [:option {:value ""} "Izaberi knjigu"]
+                                     [:option {:value "RatiMir"} "Rat i mir"]
+                                     [:option {:value "NaDriniCuprija"} "Na Drini Cuprija"]
+                                     [:option {:value "RomeoIJulija"} "Romeo i Julija"]
+                                     [:option {:value "BozanstvenaKomedija"} "Bozanstvena komedija"]
+                                     [:option {:value "DonKihot"} "Don Kihot"]]
+                                    ]
+                                   [:div {:class "form-group"}
+                                    [:input {:type "text" :name "fourth4" :style "color:red; border-color:red;" :readonly "true" :value (props :prvi)}] (h "                   ")
+                                    [:select {:name "year4" :class ""}
+                                     [:option {:value ""} "Izaberi godinu izdanja"]
+                                     [:option {:value "1956"} "1956"]
+                                     [:option {:value "1954"} "1954"]
+                                     [:option {:value "1267"} "1267"]
+                                     [:option {:value "1898"} "1898"]
+                                     [:option {:value "1569"} "1569"]
+                                     ]
+                                    ]
+                                   [:br]
+                                   [:div {:class "form-group"}
+                                    [:input {:type "text" :name "fifth" :style "color:red; border-color:red;" :readonly "true" :value (props :peti)}] (h "                   ")
+                                    [:select {:name "book5" :class ""}
+                                     [:option {:value ""} "Izaberi knjigu"]
+                                     [:option {:value "RatiMir"} "Rat i mir"]
+                                     [:option {:value "NaDriniCuprija"} "Na Drini Cuprija"]
+                                     [:option {:value "RomeoIJulija"} "Romeo i Julija"]
+                                     [:option {:value "BozanstvenaKomedija"} "Bozanstvena komedija"]
+                                     [:option {:value "DonKihot"} "Don Kihot"]]
+                                    ]
+                                   [:div {:class "form-group"}
+                                    [:input {:type "text" :name "fifth5" :style "color:red; border-color:red;" :readonly "true" :value (props :prvi)}] (h "                   ")
+                                    [:select {:name "year5" :class ""}
+                                     [:option {:value ""} "Izaberi godinu izdanja"]
+                                     [:option {:value "1956"} "1956"]
+                                     [:option {:value "1954"} "1954"]
+                                     [:option {:value "1267"} "1267"]
+                                     [:option {:value "1898"} "1898"]
+                                     [:option {:value "1569"} "1569"]
+                                     ]
+                                    ]
+                                   [:br]
+                                   [:input {:type "submit"
+                                            :value "Potvrdi odgovore"
+                                            :class "btn btn-primary"
+                                            }]
+                                   (h "   ")
+                                   [:a {:href (str "/pickAuthor")}[:input {:type "button"
+                                                                         :value "Nova igra"
+                                                                         :class "btn btn-primary"}]])]]
+                      (catch Exception e
+                        ))
+                    ]
+                   [:div {:class "col"}
+                    ]]
+                  ]
+                 )
+  )
+
+(defn pick-the-author [id1 id2 id3 id4 id5 book1 book2 book3 book4 book5]
+  (layout/pagelayout "Biblioteka" (menu/menuapp)
+                 [:br]
+                 [:div {:class "container"}
+                  [:div {:class "row"}
+                   [:div {:class "col"}]
+                   [:div {:class "col-6"}
+                    [:h3  [:marquee [:b "Pogodi autora"]] ]
+                    [:br]
+                    (try
+                      [:div {:class "tab-content" }
+                       [:div {:class "tab-pane active" :role "tabpanel"}
+                        (f/form-to [:get (str "/pickTheAuthor")]
+                                   (anti-forgery-field)
+                                   [:div {:class "form-group"}
+                                    [:input {:type "text" :name "prvi" :class "" :readonly "true" :value id1}] (h "                   ")
+                                    [:input {:type "text" :class "" :readonly "true" :value book1}](h "                                 ")
+                                    (if (or (empty? book1 ) (nil? book1) (empty? (db/select-author-by-name id1 book1 )))
+                                      [:img {:src "img/x.png" :height"25" :width"25"}]
+                                      [:img {:src "img/yes.png" :height"25" :width"25"}])
+                                    ]
+                                   [:br]
+                                   [:div {:class "form-group"}
+                                    [:input {:type "text" :name "drugi" :class "" :readonly "true" :value id2}] (h "                   ")
+                                    [:input {:type "text" :class "" :readonly "true" :value book2}](h "                                 ")
+                                    (if (or (empty? book2 ) (nil? book2) (empty? (db/select-author-by-name id2 book2 )))
+                                      [:img {:src "img/x.png" :height"25" :width"25"}]
+                                      [:img {:src "img/yes.png" :height"25" :width"25"}])
+                                    ]
+                                   [:br]
+                                   [:div {:class "form-group"}
+                                    [:input {:type "text" :name "treci" :class "" :readonly "true" :value id3}] (h "                   ")
+                                    [:input {:type "text" :class "" :readonly "true" :value book3}](h "                                 ")
+
+                                    (if (or (empty? book3 ) (nil? book3) (empty? (db/select-author-by-name id3 book3)))
+                                      [:img {:src "img/x.png" :height"25" :width"25"}]
+                                      [:img {:src "img/yes.png" :height"25" :width"25"}])
+                                    ]
+                                   [:br]
+                                   [:div {:class "form-group"}
+                                    [:input {:type "text" :name "cetvrti" :class "" :readonly "true" :value id4}] (h "                   ")
+                                    [:input {:type "text" :class "" :readonly "true" :value book4}](h "                                 ")
+                                    (if (or (empty? book4 ) (nil? book4) (empty? (db/select-author-by-name id4 book4 )))
+                                      [:img {:src "img/x.png" :height"25" :width"25"}]
+                                      [:img {:src "img/yes.png" :height"25" :width"25"}])
+                                    ]
+                                   [:br]
+                                   [:div {:class "form-group"}
+                                    [:input {:type "text" :name "peti" :class "" :readonly "true" :value id5}] (h "                   ")
+                                    [:input {:type "text" :class "" :readonly "true" :value book5}](h "                                 ")
+
+                                    (if (or (empty? book5 ) (nil? book5) (empty? (db/select-author-by-name id5 book5)))
+                                      [:img {:src "img/x.png" :height"25" :width"25"}]
+                                      [:img {:src "img/yes.png" :height"25" :width"25"}])
+                                    ]
+                                   [:br]
+
+
+
+                                   [:a {:href (str "/pickAuthor")}[:input {:type "button"
+                                                                         :value "New game"
+                                                                         :class "btn btn-primary"}]])]]
+                      (catch Exception e
+                        ))
+                    ]
+                   [:div {:class "col"}
+                    ]]
+                  ]
+                 )
+  )
+
+
+(defn pick-this-author []
+  (layout/pagelayout "Biblioteka" (menu/menuapp)
+                 [:br]
+                 [:div {:class "container"}
+                  [:div {:class "row"}
+                   [:div {:class "col"}]
+                   [:div {:class "col-6"}
+                    [:h3  [:marquee [:b "Pogodi autora"]] ]
+                    [:br]
+                    (try
+
+                      [:div {:class "tab-content" }
+                       [:div {:class "tab-pane active" :role "tabpanel"}
+                        (f/form-to [:get (str "/pickTheAuthor")]
+                                   (anti-forgery-field)
+                                   [:div {:style "display:none"}(def i 0)]
+
+                                   (for [thisauthor (db/select-authors-random)]
+                                     [:div {:class "form-group"}
+                                      [:input {:type "text" :name (str "id" (+ i 1))  :style "color:red; border-color:red;" :readonly "true" :value (:prezimeautora thisauthor)}] (h "                   ")
+                                      [:select {:name (str "book" (+ i 1)) :class ""}
+                                       [:option {:value ""} "Select  book"]
+                                       (for [book (db/select-books-order-name)]
+                                         [:option {:value (:nazivpublikacije book)} (:nazivpublikacije book)]
+                                         )
+
+                                       [:div {:style "display:none"}(def i (+ i 1))]]
+                                      [:br]
+                                      [:br]
+                                      ]
+                                     )
+
+                                   [:input {:type "submit"
+                                            :value "Send answers"
+                                            :class "btn btn-primary"
+                                            }]
+
+                                   )]]
+                      (catch Exception e
+                        ))
+                    ]
+                   [:div {:class "col"}
+                    ]]
+                  ]
+                 )
+  )
+
+
+
 
 
 
@@ -1194,6 +1462,15 @@
                                                                                            (update-this-book id namebook typeofbook year numberofexample author)
                                                                                            (catch Exception e
                                                                                              )))
+
+           (GET "/pickAuthor" [] (try
+                                 (pick-this-author)
+                                 (catch Exception e
+                                   )))
+           (GET "/pickTheAuthor" [id1 id2 id3 id4 id5 book1 book2 book3 book4 book5] (try
+                                                                                                                             (pick-the-author id1 id2 id3 id4 id5 book1 book2 book3 book4 book5)
+                                                                                                                             (catch Exception e
+                                                                                                                               )))
 
 
            (route/not-found "Not Found"))
