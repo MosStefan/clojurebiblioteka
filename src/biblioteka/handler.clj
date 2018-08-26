@@ -55,6 +55,13 @@
 (defn empty-surname []
   [:label {:for "s" :style "color:red"} [:b "Morate da unesete prezime autora!!!"]]
   )
+(defn Example [x]
+
+  (cond
+
+    (= x 5)   [:p {:style "color:green; border-color: #000000;"} [:b (str "Uspesno izmenjena knjiga")] ]
+    (= x 4)  [:p {:style "color:green; border-color: #000000;"} [:b (str "nije izmenjena knjiga")] ]
+    :else [:p {:style "color:green; border-color: #000000;"} [:b (str "nista od toga")] ]))
 (defn empty-country []
   [:label {:for "c" :style "color:red"} [:b "Morate da unesete zemlju porekla!!!"]]
   )
@@ -1187,7 +1194,7 @@
                                     ]
                                    [:br]
                                    [:div {:class "form-group"}
-                                    [:input {:type "text" :name "second2" :style "color:red; border-color:red;" :readonly "true" :value (props :prvi)}] (h "                   ")
+                                    [:input {:type "text" :name "second2" :style "color:red; border-color:red;" :readonly "true" :value (props :drugi)}] (h "                   ")
                                     [:select {:name "year2" :class ""}
                                      [:option {:value ""} "Izaberi godinu izdanja"]
                                      [:option {:value "1956"} "1956"]
@@ -1210,7 +1217,7 @@
                                     ]
                                    [:br]
                                    [:div {:class "form-group"}
-                                    [:input {:type "text" :name "third3" :style "color:red; border-color:red;" :readonly "true" :value (props :prvi)}] (h "                   ")
+                                    [:input {:type "text" :name "third3" :style "color:red; border-color:red;" :readonly "true" :value (props :treci)}] (h "                   ")
                                     [:select {:name "year3" :class ""}
                                      [:option {:value ""} "Izaberi godinu izdanja"]
                                      [:option {:value "1956"} "1956"]
@@ -1231,7 +1238,7 @@
                                      [:option {:value "DonKihot"} "Don Kihot"]]
                                     ]
                                    [:div {:class "form-group"}
-                                    [:input {:type "text" :name "fourth4" :style "color:red; border-color:red;" :readonly "true" :value (props :prvi)}] (h "                   ")
+                                    [:input {:type "text" :name "fourth4" :style "color:red; border-color:red;" :readonly "true" :value (props :cetvrti)}] (h "                   ")
                                     [:select {:name "year4" :class ""}
                                      [:option {:value ""} "Izaberi godinu izdanja"]
                                      [:option {:value "1956"} "1956"]
@@ -1253,7 +1260,7 @@
                                      [:option {:value "DonKihot"} "Don Kihot"]]
                                     ]
                                    [:div {:class "form-group"}
-                                    [:input {:type "text" :name "fifth5" :style "color:red; border-color:red;" :readonly "true" :value (props :prvi)}] (h "                   ")
+                                    [:input {:type "text" :name "fifth5" :style "color:red; border-color:red;" :readonly "true" :value (props :peti)}] (h "                   ")
                                     [:select {:name "year5" :class ""}
                                      [:option {:value ""} "Izaberi godinu izdanja"]
                                      [:option {:value "1956"} "1956"]
@@ -1264,6 +1271,7 @@
                                      ]
                                     ]
                                    [:br]
+
                                    [:input {:type "submit"
                                             :value "Potvrdi odgovore"
                                             :class "btn btn-primary"
@@ -1281,7 +1289,7 @@
                  )
   )
 
-(defn pick-the-author [id1 id2 id3 id4 id5 book1 book2 book3 book4 book5]
+(defn pick-the-author [id1 id2 id3 id4 id5 book1 book2 book3 book4 book5  year1 year2 year3 year4 year5]
   (layout/pagelayout "Biblioteka" (menu/menuapp)
                  [:br]
                  [:div {:class "container"}
@@ -1295,47 +1303,63 @@
                        [:div {:class "tab-pane active" :role "tabpanel"}
                         (f/form-to [:get (str "/pickTheAuthor")]
                                    (anti-forgery-field)
+                                   [:div {:style "display:none"}(def k 0)]
                                    [:div {:class "form-group"}
                                     [:input {:type "text" :name "prvi" :class "" :readonly "true" :value id1}] (h "                   ")
                                     [:input {:type "text" :class "" :readonly "true" :value book1}](h "                                 ")
-                                    (if (or (empty? book1 ) (nil? book1) (empty? (db/select-author-by-name id1 book1 )))
-                                      [:img {:src "img/x.png" :height"25" :width"25"}]
-                                      [:img {:src "img/yes.png" :height"25" :width"25"}])
+                                    [:input {:type "text" :class "" :readonly "true" :value year1}](h "                                 ")
+                                    (if (or (empty? book1 ) (nil? book1) (empty? year1 ) (nil? year1) (empty? (db/select-author-by-name id1 book1 year1)))
+                                      [:img {:src "img/no.png" :height"25" :width"25"} [:div {:style "display:none"}(def k (+ k 1))] [:p {:style "color:green; border-color: #000000;"} [:b (str "Uspesno izmenjena knjiga")] ]]
+                                      [:img {:src "img/yes.png" :height"25" :width"25"} ])
                                     ]
                                    [:br]
+
                                    [:div {:class "form-group"}
                                     [:input {:type "text" :name "drugi" :class "" :readonly "true" :value id2}] (h "                   ")
                                     [:input {:type "text" :class "" :readonly "true" :value book2}](h "                                 ")
-                                    (if (or (empty? book2 ) (nil? book2) (empty? (db/select-author-by-name id2 book2 )))
-                                      [:img {:src "img/x.png" :height"25" :width"25"}]
+                                    [:input {:type "text" :class "" :readonly "true" :value year2}](h "                                 ")
+                                    (if (or (empty? book2 ) (nil? book2) (empty? year2 ) (nil? year2) (empty? (db/select-author-by-name id2 book2 year2)))
+                                      [:img {:src "img/no.png" :height"25" :width"25"} [:div {:style "display:none"}(def k (+ k 1))]]
                                       [:img {:src "img/yes.png" :height"25" :width"25"}])
                                     ]
                                    [:br]
+
                                    [:div {:class "form-group"}
                                     [:input {:type "text" :name "treci" :class "" :readonly "true" :value id3}] (h "                   ")
                                     [:input {:type "text" :class "" :readonly "true" :value book3}](h "                                 ")
+                                    [:input {:type "text" :class "" :readonly "true" :value year3}](h "                                 ")
 
-                                    (if (or (empty? book3 ) (nil? book3) (empty? (db/select-author-by-name id3 book3)))
-                                      [:img {:src "img/x.png" :height"25" :width"25"}]
+                                    (if (or (empty? book3 ) (nil? book3) (empty? year3 ) (nil? year3) (empty? (db/select-author-by-name id3 book3 year3)))
+                                      [:img {:src "img/no.png" :height"25" :width"25"} [:div {:style "display:none"}(def k (+ k 1))]]
                                       [:img {:src "img/yes.png" :height"25" :width"25"}])
                                     ]
                                    [:br]
+
                                    [:div {:class "form-group"}
                                     [:input {:type "text" :name "cetvrti" :class "" :readonly "true" :value id4}] (h "                   ")
                                     [:input {:type "text" :class "" :readonly "true" :value book4}](h "                                 ")
-                                    (if (or (empty? book4 ) (nil? book4) (empty? (db/select-author-by-name id4 book4 )))
-                                      [:img {:src "img/x.png" :height"25" :width"25"}]
+                                    [:input {:type "text" :class "" :readonly "true" :value year4}](h "                                 ")
+                                    (if (or (empty? book4 ) (nil? book4) (empty? year4 ) (nil? year4) (empty? (db/select-author-by-name id4 book4 year4)))
+                                      [:img {:src "img/no.png" :height"25" :width"25"} [:div {:style "display:none"}(def k (+ k 1))]]
                                       [:img {:src "img/yes.png" :height"25" :width"25"}])
                                     ]
                                    [:br]
+
                                    [:div {:class "form-group"}
                                     [:input {:type "text" :name "peti" :class "" :readonly "true" :value id5}] (h "                   ")
                                     [:input {:type "text" :class "" :readonly "true" :value book5}](h "                                 ")
+                                    [:input {:type "text" :class "" :readonly "true" :value year5}](h "                                 ")
 
-                                    (if (or (empty? book5 ) (nil? book5) (empty? (db/select-author-by-name id5 book5)))
-                                      [:img {:src "img/x.png" :height"25" :width"25"}]
-                                      [:img {:src "img/yes.png" :height"25" :width"25"}])
+                                    (if (or (empty? book5 ) (nil? book5) (empty? year5 ) (nil? year5) (empty? (db/select-author-by-name id5 book5 year5)))
+                                      [:img {:src "img/no.png" :height"25" :width"25"} [:div {:style "display:none"}(def k (+ k 1))]]
+                                      [:img {:src "img/yes.png" :height"25" :width"25"} ])
                                     ]
+                                   [:br]
+
+
+
+                                (Example k)
+
                                    [:br]
 
 
@@ -1369,26 +1393,35 @@
                         (f/form-to [:get (str "/pickTheAuthor")]
                                    (anti-forgery-field)
                                    [:div {:style "display:none"}(def i 0)]
+                                   [:div {:style "display:none"}(def j 0)]
 
                                    (for [thisauthor (db/select-authors-random)]
-                                     [:div {:class "form-group"}
+                                     [:div {:class ""}
                                       [:input {:type "text" :name (str "id" (+ i 1))  :style "color:red; border-color:red;" :readonly "true" :value (:prezimeautora thisauthor)}] (h "                   ")
                                       [:select {:name (str "book" (+ i 1)) :class ""}
-                                       [:option {:value ""} "Select  book"]
+                                       [:option {:value ""} "Select book"]
                                        (for [book (db/select-books-order-name)]
                                          [:option {:value (:nazivpublikacije book)} (:nazivpublikacije book)]
                                          )
 
                                        [:div {:style "display:none"}(def i (+ i 1))]]
-                                      [:br]
+
+
+                                      [:select {:name (str "year" (+ j 1)) :class ""}
+                                       [:option {:value ""} "Select year"]
+                                       (for [book (db/select-books-order-year)]
+                                         [:option {:value (:godinaizdanja book)} (:godinaizdanja book)]
+                                         )
+
+                                       [:div {:style "display:none"}(def j (+ j 1))]]
                                       [:br]
                                       ]
                                      )
-
                                    [:input {:type "submit"
                                             :value "Send answers"
                                             :class "btn btn-primary"
                                             }]
+
 
                                    )]]
                       (catch Exception e
@@ -1467,8 +1500,8 @@
                                  (pick-this-author)
                                  (catch Exception e
                                    )))
-           (GET "/pickTheAuthor" [id1 id2 id3 id4 id5 book1 book2 book3 book4 book5] (try
-                                                                                                                             (pick-the-author id1 id2 id3 id4 id5 book1 book2 book3 book4 book5)
+           (GET "/pickTheAuthor" [id1 id2 id3 id4 id5 book1 book2 book3 book4 book5 year1 year2 year3 year4 year5] (try
+                                                                                                                             (pick-the-author id1 id2 id3 id4 id5 book1 book2 book3 book4 book5 year1 year2 year3 year4 year5)
                                                                                                                              (catch Exception e
                                                                                                                                )))
 

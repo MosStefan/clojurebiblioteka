@@ -64,10 +64,19 @@
       (throw (Exception. "Dogodila se greska!"))))
   )
 
-(defn select-author-by-name [surname book]
+(defn select-author-by-name [surname book year]
   (try
     (j/with-db-transaction [t-con db-map]
-                           (j/query db-map ["SELECT * FROM nagradna_igra WHERE prezimeautora=? AND najpoznatijedelo=?" surname book]
+                           (j/query db-map ["SELECT * FROM nagradna_igra WHERE prezimeautora=? AND najpoznatijedelo=? AND godinaizdanja=?" surname book year]
+                                    ))
+    (catch Exception e
+      (throw (Exception. "Dogodila se greska!"))))
+  )
+
+(defn select-author-by-year [surname year]
+  (try
+    (j/with-db-transaction [t-con db-map]
+                           (j/query db-map ["SELECT * FROM nagradna_igra WHERE prezimeautora=? AND godinaizdanja=?" surname year]
                                     ))
     (catch Exception e
       (throw (Exception. "Dogodila se greska!"))))
@@ -143,6 +152,16 @@
   (try
     (into [] (j/with-db-transaction [t-con db-map]
                                     (j/query db-map ["SELECT * FROM autor a INNER JOIN publikacija p ON a.autorid=p.autorid order by nazivpublikacije asc"]
+                                             )))
+    (catch Exception e
+      (throw (Exception. "Dogodila se greska!"))))
+
+  )
+
+(defn select-books-order-year []
+  (try
+    (into [] (j/with-db-transaction [t-con db-map]
+                                    (j/query db-map ["SELECT * FROM autor a INNER JOIN publikacija p ON a.autorid=p.autorid order by godinaizdanja asc"]
                                              )))
     (catch Exception e
       (throw (Exception. "Dogodila se greska!"))))
