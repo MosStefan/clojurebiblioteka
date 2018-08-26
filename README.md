@@ -51,7 +51,9 @@ Third:**DELETE** publication-we delete choose book from database.
 >>We connect table publikacija with table autor with foreign key by autorid.
 In this menu card we can **INSERT** new book where have form for entry data about new book. In this form also we have to choose surname author for book which insert, but just authors which exists in database. Then we have **SELECT** command which display in the table all the books from the database which order by name book, but first we have field to insert surname author which books want to show.
 With **DELETE** command we delete choose book from database. At the end with **UPDATE**:change data about choose book from table and save new data about this choose book in the table and database.
-	
+
+>We add new card **Promotion** where have one quiz. You have five random authors in database and you must connect **authors** with their **book** and **year of publication**. If you match all authors correct you got free month promotion.
+Also,in this card we work with pdf template **[clj-pdf "2.2.33"]** where we make pdf file like proof for this promotion.
 >>All CRUD operation which describe is here
 
 >
