@@ -1,4 +1,6 @@
 (ns biblioteka.handler
+  (:use clj-pdf.core
+        ring.util.io)
   (:require [compojure.core :refer :all]
             [compojure.route :as route]
             [ring.middleware.defaults :refer [wrap-defaults site-defaults]]
@@ -26,6 +28,41 @@
 (f/hidden-field "__anti-forgery-token" *anti-forgery-token*))
 
 (def props (read-properties "src/autori.properties"))
+
+(defn show-award
+  []
+
+  (piped-input-stream
+    (fn [output-stream]
+      (pdf
+        [{:title (str "Biblioteka-promocije")
+          :orientation :landscape
+          :size :a5
+          :author "Stefan"
+          :register-system-fonts true
+          }
+         [:heading {:style {:size 48 :color [100 40 150] :align :center}} "Promocija"]
+         [:spacer]
+         [:spacer]
+         [:spacer]
+         [:spacer]
+         [:spacer]
+
+         [:paragraph {:style :bold
+                      :size 24
+                      :family :helvetica
+                      :align :center
+                      :color [0 234 123]} "Cestitamo, za pokazano odlicno znanje darujemo vam mesec dana besplatne clanarine!!!"]
+
+
+         ]
+        output-stream))))
+
+(defn award-pdf []
+  "show price"
+
+  {:headers {"Content-Type" "application/pdf"}
+   :body (show-award )})
 
 ; POCETNA STRANA
 (defn index []
@@ -55,13 +92,15 @@
 (defn empty-surname []
   [:label {:for "s" :style "color:red"} [:b "Morate da unesete prezime autora!!!"]]
   )
-(defn Example [x]
+(defn show-price [x]
 
   (cond
 
-    (= x 5)   [:p {:style "color:green; border-color: #000000;"} [:b (str "Uspesno izmenjena knjiga")] ]
-    (= x 4)  [:p {:style "color:green; border-color: #000000;"} [:b (str "nije izmenjena knjiga")] ]
-    :else [:p {:style "color:green; border-color: #000000;"} [:b (str "nista od toga")] ]))
+    (= x 5)   [:p {:style "color:green; border-color: #000000;"} [:b (str "Cestitamo sve ste pogodili!!!")] [:a {:href "/award" :target "_blank"} [:input {:type  "button"
+                                                                                                                                            :value "Cestitamo ostvarili ste mesecni popust,potvrdite klikom na dugme!!!"
+                                                                                                                                            :class "btn btn-success"}]]]
+    (= x 4)  [:p {:style "color:green; border-color: #000000;"} [:b (str "Blizu ste, vise srece drugi put!!!")] ]
+    :else [:p {:style "color:green; border-color: #000000;"} [:b (str "Morate malo obnoviti gradivo!!!")] ]))
 (defn empty-country []
   [:label {:for "c" :style "color:red"} [:b "Morate da unesete zemlju porekla!!!"]]
   )
@@ -1152,7 +1191,7 @@
                   [:div {:class "row"}
                    [:div {:class "col"}]
                    [:div {:class "col-6"}
-                    [:h3  [:marquee [:b "Pogodi autora za datu knjigu"]] ]
+                    [:h3  [:marquee [:b "Povezi autore sa njihovim delima i godinama izdanja"]] ]
                     [:br]
                     (try
                       [:div {:class "tab-content" }
@@ -1296,7 +1335,7 @@
                   [:div {:class "row"}
                    [:div {:class "col"}]
                    [:div {:class "col-6"}
-                    [:h3  [:marquee [:b "Pogodi autora"]] ]
+                    [:h3  [:marquee [:b "Povezi autore sa njihovim delima i godinama izdanja"]] ]
                     [:br]
                     (try
                       [:div {:class "tab-content" }
@@ -1309,8 +1348,8 @@
                                     [:input {:type "text" :class "" :readonly "true" :value book1}](h "                                 ")
                                     [:input {:type "text" :class "" :readonly "true" :value year1}](h "                                 ")
                                     (if (or (empty? book1 ) (nil? book1) (empty? year1 ) (nil? year1) (empty? (db/select-author-by-name id1 book1 year1)))
-                                      [:img {:src "img/no.png" :height"25" :width"25"} [:div {:style "display:none"}(def k (+ k 1))] [:p {:style "color:green; border-color: #000000;"} [:b (str "Uspesno izmenjena knjiga")] ]]
-                                      [:img {:src "img/yes.png" :height"25" :width"25"} ])
+                                      [:img {:src "img/no.png" :height"25" :width"25"} [:div {:style "display:none"}] [:p {:style "color:red; border-color: #000000;"} [:b (str "Netacno")] ]]
+                                      [:img {:src "img/yes.png" :height"25" :width"25"}[:div {:style "display:none"}(def k (+ k 1))] [:p {:style "color:green; border-color: #000000;"} [:b (str "Tacno")] ] ])
                                     ]
                                    [:br]
 
@@ -1319,8 +1358,8 @@
                                     [:input {:type "text" :class "" :readonly "true" :value book2}](h "                                 ")
                                     [:input {:type "text" :class "" :readonly "true" :value year2}](h "                                 ")
                                     (if (or (empty? book2 ) (nil? book2) (empty? year2 ) (nil? year2) (empty? (db/select-author-by-name id2 book2 year2)))
-                                      [:img {:src "img/no.png" :height"25" :width"25"} [:div {:style "display:none"}(def k (+ k 1))]]
-                                      [:img {:src "img/yes.png" :height"25" :width"25"}])
+                                      [:img {:src "img/no.png" :height"25" :width"25"} [:div {:style "display:none"}] [:p {:style "color:red; border-color: #000000;"} [:b (str "Netacno")] ]]
+                                      [:img {:src "img/yes.png" :height"25" :width"25"} [:div {:style "display:none"}(def k (+ k 1))] [:p {:style "color:green; border-color: #000000;"} [:b (str "Tacno")] ]])
                                     ]
                                    [:br]
 
@@ -1330,8 +1369,8 @@
                                     [:input {:type "text" :class "" :readonly "true" :value year3}](h "                                 ")
 
                                     (if (or (empty? book3 ) (nil? book3) (empty? year3 ) (nil? year3) (empty? (db/select-author-by-name id3 book3 year3)))
-                                      [:img {:src "img/no.png" :height"25" :width"25"} [:div {:style "display:none"}(def k (+ k 1))]]
-                                      [:img {:src "img/yes.png" :height"25" :width"25"}])
+                                      [:img {:src "img/no.png" :height"25" :width"25"} [:div {:style "display:none"}] [:p {:style "color:red; border-color: #000000;"} [:b (str "Netacno")] ]]
+                                      [:img {:src "img/yes.png" :height"25" :width"25"} [:div {:style "display:none"}(def k (+ k 1))] [:p {:style "color:green; border-color: #000000;"} [:b (str "Tacno")] ]])
                                     ]
                                    [:br]
 
@@ -1340,8 +1379,8 @@
                                     [:input {:type "text" :class "" :readonly "true" :value book4}](h "                                 ")
                                     [:input {:type "text" :class "" :readonly "true" :value year4}](h "                                 ")
                                     (if (or (empty? book4 ) (nil? book4) (empty? year4 ) (nil? year4) (empty? (db/select-author-by-name id4 book4 year4)))
-                                      [:img {:src "img/no.png" :height"25" :width"25"} [:div {:style "display:none"}(def k (+ k 1))]]
-                                      [:img {:src "img/yes.png" :height"25" :width"25"}])
+                                      [:img {:src "img/no.png" :height"25" :width"25"} [:div {:style "display:none"}] [:p {:style "color:red; border-color: #000000;"} [:b (str "Netacno")] ]]
+                                      [:img {:src "img/yes.png" :height"25" :width"25"} [:div {:style "display:none"}(def k (+ k 1))] [:p {:style "color:green; border-color: #000000;"} [:b (str "Tacno")] ]])
                                     ]
                                    [:br]
 
@@ -1351,14 +1390,14 @@
                                     [:input {:type "text" :class "" :readonly "true" :value year5}](h "                                 ")
 
                                     (if (or (empty? book5 ) (nil? book5) (empty? year5 ) (nil? year5) (empty? (db/select-author-by-name id5 book5 year5)))
-                                      [:img {:src "img/no.png" :height"25" :width"25"} [:div {:style "display:none"}(def k (+ k 1))]]
-                                      [:img {:src "img/yes.png" :height"25" :width"25"} ])
+                                      [:img {:src "img/no.png" :height"25" :width"25"} [:div {:style "display:none"}] [:p {:style "color:red; border-color: #000000;"} [:b (str "Netacno")] ]]
+                                      [:img {:src "img/yes.png" :height"25" :width"25"} [:div {:style "display:none"}(def k (+ k 1))] [:p {:style "color:green; border-color: #000000;"} [:b (str "Tacno")] ] ])
                                     ]
                                    [:br]
 
 
 
-                                (Example k)
+                                (show-price k)
 
                                    [:br]
 
@@ -1384,7 +1423,7 @@
                   [:div {:class "row"}
                    [:div {:class "col"}]
                    [:div {:class "col-6"}
-                    [:h3  [:marquee [:b "Pogodi autora"]] ]
+                    [:h3  [:marquee [:b "Povezi autore sa njihovim delima i godinama izdanja"]] ]
                     [:br]
                     (try
 
@@ -1441,6 +1480,7 @@
 
 (defroutes app-routes
            (GET "/" [] (index))
+           (GET "/award" [] (award-pdf))
            (GET "/showAuthors" [] (try (select-authors) (catch Exception e
                                                       (error-load-author e))))
            (GET "/insertAuthor" [] (insert-author-page))

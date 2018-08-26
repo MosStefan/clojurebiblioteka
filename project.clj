@@ -10,6 +10,7 @@
                  [ring/ring-core "1.6.1"]
                  [org.clojure/java.jdbc "0.7.6"]
                  [mysql/mysql-connector-java "5.1.18"]
+                 [clj-pdf "2.2.33"]
                  [clj-time "0.6.0"]
                  [propertea "1.2.3"]
                  [org.clojure/clojure-contrib "1.2.0"]

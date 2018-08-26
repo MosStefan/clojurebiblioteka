@@ -2,9 +2,14 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="1a455ba5-e526-4318-9e25-4d289a893a25" name="Default" comment="">
+      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/libraries/Leiningen__commons_codec_1_6.xml" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/resources/public/img/x.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/resources/public/img/yes.png" afterPath="" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/biblioteka.iml" afterPath="$PROJECT_DIR$/biblioteka.iml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/project.clj" afterPath="$PROJECT_DIR$/project.clj" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/biblioteka/handler.clj" afterPath="$PROJECT_DIR$/src/biblioteka/handler.clj" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/biblioteka/models/db.clj" afterPath="$PROJECT_DIR$/src/biblioteka/models/db.clj" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/biblioteka/views/menu.clj" afterPath="$PROJECT_DIR$/src/biblioteka/views/menu.clj" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -18,15 +23,15 @@
       <file leaf-file-name="handler.clj" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/biblioteka/handler.clj">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="207">
-              <caret line="1422" column="46" lean-forward="false" selection-start-line="1422" selection-start-column="46" selection-end-line="1422" selection-end-column="46" />
+            <state relative-caret-position="152">
+              <caret line="1425" column="92" lean-forward="false" selection-start-line="1425" selection-start-column="92" selection-end-line="1425" selection-end-column="92" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="yes.png" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/resources/public/img/yes.png">
+      <file leaf-file-name="no.png" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/resources/public/img/no.png">
           <provider selected="true" editor-type-id="images">
             <state />
           </provider>
@@ -45,8 +50,8 @@
       <file leaf-file-name="menu.clj" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/biblioteka/views/menu.clj">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="663">
-              <caret line="39" column="9" lean-forward="false" selection-start-line="39" selection-start-column="9" selection-end-line="39" selection-end-column="9" />
+            <state relative-caret-position="397">
+              <caret line="43" column="32" lean-forward="false" selection-start-line="43" selection-start-column="32" selection-end-line="43" selection-end-column="32" />
               <folding />
             </state>
           </provider>
@@ -55,8 +60,8 @@
       <file leaf-file-name="project.clj" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/project.clj">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="238">
-              <caret line="14" column="14" lean-forward="false" selection-start-line="14" selection-start-column="14" selection-end-line="14" selection-end-column="14" />
+            <state relative-caret-position="204">
+              <caret line="12" column="35" lean-forward="false" selection-start-line="12" selection-start-column="35" selection-end-line="12" selection-end-column="35" />
               <folding />
             </state>
           </provider>
@@ -87,6 +92,7 @@
       <find>na</find>
       <find>&quot;na&quot;</find>
       <find>thisauthor</find>
+      <find>pogod</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -106,10 +112,10 @@
         <option value="$PROJECT_DIR$/resources/public/css/background.css" />
         <option value="$PROJECT_DIR$/resources/public/css/background3.css" />
         <option value="$PROJECT_DIR$/src/biblioteka/views/layout.clj" />
-        <option value="$PROJECT_DIR$/project.clj" />
-        <option value="$PROJECT_DIR$/src/biblioteka/views/menu.clj" />
         <option value="$PROJECT_DIR$/src/autori.properties" />
         <option value="$PROJECT_DIR$/src/biblioteka/models/db.clj" />
+        <option value="$PROJECT_DIR$/project.clj" />
+        <option value="$PROJECT_DIR$/src/biblioteka/views/menu.clj" />
         <option value="$PROJECT_DIR$/src/biblioteka/handler.clj" />
       </list>
     </option>
@@ -135,7 +141,6 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="PackagesPane" />
       <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
@@ -182,8 +187,9 @@
           <select />
         </subPane>
       </pane>
-      <pane id="Scratches" />
       <pane id="AndroidView" />
+      <pane id="Scratches" />
+      <pane id="PackagesPane" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -692,6 +698,20 @@
       <option name="HOST" value="localhost" />
       <option name="PORT" value="5005" />
     </configuration>
+    <configuration default="true" type="Remote" factoryName="Remote">
+      <option name="USE_SOCKET_TRANSPORT" value="true" />
+      <option name="SERVER_MODE" value="false" />
+      <option name="SHMEM_ADDRESS" value="javadebug" />
+      <option name="HOST" value="localhost" />
+      <option name="PORT" value="5005" />
+    </configuration>
+    <configuration default="true" type="Remote" factoryName="Remote">
+      <option name="USE_SOCKET_TRANSPORT" value="true" />
+      <option name="SERVER_MODE" value="false" />
+      <option name="SHMEM_ADDRESS" value="javadebug" />
+      <option name="HOST" value="localhost" />
+      <option name="PORT" value="5005" />
+    </configuration>
     <configuration name="remot" type="ClojureREPL" factoryName="Remote">
       <setting name="host" value="localhost" />
       <setting name="port" value="51618" />
@@ -736,7 +756,6 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1376" height="744" extended-state="6" />
-    <editor active="true" />
     <layout>
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
@@ -966,22 +985,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/project.clj">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="238">
-          <caret line="14" column="14" lean-forward="false" selection-start-line="14" selection-start-column="14" selection-end-line="14" selection-end-column="14" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/biblioteka/views/menu.clj">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="663">
-          <caret line="39" column="9" lean-forward="false" selection-start-line="39" selection-start-column="9" selection-end-line="39" selection-end-column="9" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/autori.properties">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="68">
@@ -1005,12 +1008,16 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/resources/public/img/no.png">
-      <provider selected="true" editor-type-id="images">
-        <state />
+    <entry file="file://$PROJECT_DIR$/project.clj">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="204">
+          <caret line="12" column="35" lean-forward="false" selection-start-line="12" selection-start-column="35" selection-end-line="12" selection-end-column="35" />
+          <folding />
+        </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/resources/public/img/x.png">
+    <entry file="file://$PROJECT_DIR$/resources/public/img/x.png" />
+    <entry file="file://$PROJECT_DIR$/resources/public/img/no.png">
       <provider selected="true" editor-type-id="images">
         <state />
       </provider>
@@ -1020,10 +1027,18 @@
         <state />
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/biblioteka/views/menu.clj">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="397">
+          <caret line="43" column="32" lean-forward="false" selection-start-line="43" selection-start-column="32" selection-end-line="43" selection-end-column="32" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/biblioteka/handler.clj">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="207">
-          <caret line="1422" column="46" lean-forward="false" selection-start-line="1422" selection-start-column="46" selection-end-line="1422" selection-end-column="46" />
+        <state relative-caret-position="152">
+          <caret line="1425" column="92" lean-forward="false" selection-start-line="1425" selection-start-column="92" selection-end-line="1425" selection-end-column="92" />
           <folding />
         </state>
       </provider>

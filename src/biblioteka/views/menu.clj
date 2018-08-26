@@ -41,7 +41,7 @@
      [:li {:class "nav-item dropdown"}
       [:a {:class "nav-link dropdown-toggle" :href "/books" :id "navbarDropdownMenuLink" :data-toggle "dropdown" :aria-hashpopup "true" :aria-expanded "false"} "PROMOTION"]
       [:div {:class "dropdown-menu" :aria-labelledby "navbarDropdownMenuLink"}
-       [:a {:class "dropdown-item" :href "/pickAuthor"} "Povezi autora"]
+       [:a {:class "dropdown-item" :href "/pickAuthor"} "Povezi autora i njihova dela"]
        ]]
      ]
     ]])
