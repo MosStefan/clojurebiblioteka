@@ -37,11 +37,23 @@
       [:div {:class "dropdown-menu" :aria-labelledby "navbarDropdownMenuLink"}
        [:a {:class "dropdown-item" :href "/showBooks"} "Prikazi knjige"]
        [:a {:class "dropdown-item" :href "/insertBook"} "Unesi novu knjigu"]
+       [:a {:class "dropdown-item" :href "/deleteBook"} "Obrisi knjigu"]
+       ]]
+
+     [:li {:class "nav-item dropdown"}
+      [:a {:class "nav-link dropdown-toggle" :href "/members" :id "navbarDropdownMenuLink" :data-toggle "dropdown" :aria-hashpopup "true" :aria-expanded "false"} "MEMBERS"]
+      [:div {:class "dropdown-menu" :aria-labelledby "navbarDropdownMenuLink"}
+       [:a {:class "dropdown-item" :href "/insertMember"} "Ubaci novog clana"]
+       [:a {:class "dropdown-item" :href "/insertNewDataMember"} "Novo iznajmljivanje knjige"]
+       [:a {:class "dropdown-item" :href "/showRecords"} "Prikazi iznajmljene knjige"]
        ]]
      [:li {:class "nav-item dropdown"}
       [:a {:class "nav-link dropdown-toggle" :href "/books" :id "navbarDropdownMenuLink" :data-toggle "dropdown" :aria-hashpopup "true" :aria-expanded "false"} "PROMOTION"]
       [:div {:class "dropdown-menu" :aria-labelledby "navbarDropdownMenuLink"}
        [:a {:class "dropdown-item" :href "/pickAuthor"} "Povezi autora i njihova dela"]
        ]]
+
+
+
      ]
     ]])

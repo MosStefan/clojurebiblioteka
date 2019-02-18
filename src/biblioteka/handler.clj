@@ -89,9 +89,26 @@
 (defn empty-name []
   [:label {:for "n" :style "color:red"} [:b "Morate da unesete ime autora!!!"]]
   )
+(defn empty-member-name []
+  [:label {:for "n" :style "color:red"} [:b "Morate da unesete ime novog clana!!!"]]
+  )
+
+(defn empty-member-jmbg []
+  [:label {:for "jm" :style "color:red"} [:b "Morate da unesete jmbg novog clana(JMBG mora imati tacno 13 cifara)!!!"]]
+  )
+
 (defn empty-surname []
   [:label {:for "s" :style "color:red"} [:b "Morate da unesete prezime autora!!!"]]
   )
+(defn empty-member-surname []
+  [:label {:for "s" :style "color:red"} [:b "Morate da unesete prezime novog clana!!!"]]
+  )
+
+
+
+
+
+
 (defn show-price [x]
 
   (cond
@@ -104,14 +121,49 @@
 (defn empty-country []
   [:label {:for "c" :style "color:red"} [:b "Morate da unesete zemlju porekla!!!"]]
   )
+
+(defn empty-mail []
+  [:label {:for "ml" :style "color:red"} [:b "Morate da unesete ispravan mail(*koji sadrzi @)!!!"]]
+  )
+(defn empty-phone []
+  [:label {:for "ph" :style "color:red"} [:b "Morate da unesete broj telefona!!!"]]
+  )
 (defn empty-dateofbirth []
   [:label {:for "dbr" :style "color:red"} [:b "Morate da unesete datum rodjenja!!!"]]
+  )
+
+(defn empty-datein []
+  [:label {:for "datetake" :style "color:red"} [:b "Morate da unesete datum uzimanja knjige!!!"]]
+  )
+
+(defn empty-dateout []
+  [:label {:for "datereturn" :style "color:red"} [:b "Morate da unesete datum vracanjaknjige!!!"]]
+  )
+
+(defn empty-dateofentry []
+  [:label {:for "den" :style "color:red"} [:b "Morate da unesete datum uclanjenja!!!"]]
   )
 (defn empty-mainbook []
   [:label {:for "mb"  :style "color:red"} [:b "Morate da unesete najznacajnije delo!!!"]]
   )
+
+( defn empty-name-of-book []
+[:label {:for "nb"  :style "color:red"} [:b "Morate da unesete naziv knjige!!!"]]
+)
 (defn dateofbirth-format []
   [:label {:for "ym" :style "color:red"} [:b "Morate da unesete ispravan format za datum rodjenja: YYYY-MM-dd!!! "]]
+  )
+
+(defn dateofin-format []
+  [:label {:for "datet" :style "color:red"} [:b "Morate da unesete ispravan format za datum uzimanja knjige: YYYY-MM-dd!!! "]]
+  )
+
+(defn dateofout-format []
+  [:label {:for "dater" :style "color:red"} [:b "Morate da unesete ispravan format za datum vracanja knjige: YYYY-MM-dd!!! "]]
+  )
+
+(defn dateofentry-format []
+  [:label {:for "enr" :style "color:red"} [:b "Morate da unesete ispravan format za datum uclanjenja: YYYY-MM-dd!!! "]]
   )
 
 (defn year-must-number []
@@ -123,8 +175,24 @@
   [:label {:style "color:red; border-color: #000000;"} [:b (str "Nije ubacen autor " surname ", jer vec postoji u bazi!!!")]]
   )
 
+(defn exist-name-of-member [surname]
+  [:label {:style "color:red; border-color: #000000;"} [:b (str "Nije ubacen novi clan " surname ", jer vec postoji u bazi!!!")]]
+  )
+
+(defn exist-record-of-member [surname]
+  [:label {:style "color:red; border-color: #000000;"} [:b (str "NEE RADIII!!!Nije ubacen novi evidencija za clana " surname ", jer vec postoji u bazi!!!")]]
+  )
+
+
 (defn success-insert-author [surname]
   [:p {:style "color:green; border-color: #000000;"} [:b (str "Uspesno ubacen autor " surname "!!!")]])
+(defn success-insert-new-member [surname]
+  [:p {:style "color:green; border-color: #000000;"} [:b (str "Uspesno ubacen novi clan " surname "!!!")]])
+
+(defn success-insert-new-record-for-member [surname]
+  [:p {:style "color:green; border-color: #000000;"} [:b (str "Uspesno ubacen evidencija za clana " surname "-a!!!")]])
+
+
 (defn success-update-author [surname]
   [:p {:style "color:green; border-color: #000000;"} [:b (str "Uspesno izmenjen autor " surname "!!!")]])
 (defn exist-name-of-author-update [surname]
@@ -132,6 +200,10 @@
 
 (defn empty-surname-author []
   [:label {:for "na" :style "color:red"} [:b "Morate da unesete prezime autora!!!"]]
+  )
+
+(defn empty-surname-member []
+  [:label {:for "nmemb" :style "color:red"} [:b "ZASSSTOOO!Morate da unesete prezime clana biblioteke!!!"]]
   )
 (defn insert-new-author-page [name surname dateofbirth country mainbook]
   (layout/pagelayout "Biblioteka" (menu/menuapp)
@@ -661,7 +733,7 @@
                  [:input {:type "text" :name "surnameAuthor" :class "form-control" :id "nat"}]
                  ]
                 [:input {:type "submit"
-                         :value "Prikazi knjige"
+                         :value "Prikazi sve knjige"
                          :class "btn btn-primary"
                          }]
                 (h "   ")
@@ -750,7 +822,7 @@
         [:th "Naziv knjige"]
         [:th "Zanr knjige"]
         [:th "Godina izdanja"]
-        [:th "BrojPrimeraka"]
+        [:th "Status"]
         [:th "Obrisi knjigu"]
         [:th "Izmeni knjigu"]
         ]]
@@ -759,9 +831,9 @@
             (try
               (for [book (db/select_books surnameAuthor)]
                 [:tr [:td (:nazivpublikacije book)]
-                 [:td (:tippublikacije book)]
+                 [:td (:nazivzanra book)]
                  [:td (:godinaizdanja book)]
-                 [:td (:brojprimeraka book)]
+                 [:td (:status book)]
                  [:td [:a {:href (str "/deleteBook/" (h (:idpublikacije book)) "/" (h (:prezimeautora book)) ) :style "color:purple;"} "Obrisi"]]
                  [:td [:a {:href (str "/updateBook/" (h (:idpublikacije book)) ) :style "color:purple;"} "Izmeni"]]])
               (catch Exception e
@@ -838,7 +910,7 @@
         [:th {:style "border-style: solid;  border-color: #000000;    background-color: red;    color: black;"} "Naziv knjige"  ]
         [:th {:style "border-style: solid;  border-color: #000000;    background-color: red;    color: black;"} "Zanr knjige"  ]
         [:th {:style "border-style: solid;  border-color: #000000;    background-color: red;    color: black;"}"Godina izdanja" ]
-        [:th {:style "border-style: solid;  border-color: #000000;    background-color: red;    color: black;"}"Broj primeraka"  ]
+        [:th {:style "border-style: solid;  border-color: #000000;    background-color: red;    color: black;"}"Status"  ]
         [:th {:style "border-style: solid;  border-color: #000000;    background-color: red;    color: black;"}"Obrisi knjigu"  ]
         [:th {:style "border-style: solid;  border-color: #000000;    background-color: red;    color: black;"} "Izmeni knjigu"]
         ]]
@@ -847,9 +919,9 @@
             (try
               (for [book (db/select_books surnameAuthor)]
                 [:tr [:td {:style "border-style: solid;  border-color: #000000;    background-color: yellow;    color: black;"} (:nazivpublikacije book)]
-                 [:td {:style "border-style: solid;  border-color: #000000;    background-color: yellow;    color: black;"} (:tippublikacije book)]
+                 [:td {:style "border-style: solid;  border-color: #000000;    background-color: yellow;    color: black;"} (:nazivzanra book)]
                  [:td {:style "border-style: solid;  border-color: #000000;    background-color: yellow;    color: black;"} (:godinaizdanja book)]
-                 [:td {:style "border-style: solid;  border-color: #000000;    background-color: yellow;    color: black;"} (:brojprimeraka book)]
+                 [:td {:style "border-style: solid;  border-color: #000000;    background-color: yellow;    color: black;"} (:status book)]
                  [:td {:style "border-style: solid;  border-color: #000000;    background-color: yellow;    color: black;"} [:a {:href (str "/deleteBook/" (h (:idpublikacije book))  "/" (h (:prezimeautora book)) ) :style "color:purple;"} "Obrisi"]]
                  [:td {:style "border-style: solid;  border-color: #000000;    background-color: yellow;    color: black;"}  [:a {:href (str "/updateBook/" (h (:idpublikacije book))) :style "color:purple;"} "Izmeni"]]])
               (catch Exception e
@@ -896,9 +968,16 @@
                                   [:input {:type "text" :name "namebook" :class "form-control" :id "nb"}]
                                   ]
                                  [:div {:class "form-group"}
-                                  [:label {:for "tb"} [:b "Zanr knjige:"] ]
-                                  [:input {:type "text" :name "typeofbook" :class "form-control" :id "tb"}]
+                                  [:label {:for "zn"} [:b "Zanr knjige:"]]
+                                  [:select {:name "genre" :id "zn" :class "form-control"}
+                                   (try
+                                     (for [zanr (db/select-genre-order-name)]
+                                       [:option {:value (:zanrid zanr)} (:nazivzanra zanr)]
+                                       )
 
+                                     (catch Exception e
+                                       [:b "Dogodila se greska prilikom ucitavanja autora!"]))
+                                   ]
                                   ]
 
                                  [:div {:class "form-group"}
@@ -907,11 +986,6 @@
 
                                   ]
 
-                                 [:div {:class "form-group"}
-                                  [:label {:for "ne"}[:b "Broj primeraka:"]]
-                                  [:input {:type "text" :name "numberofexample" :class "form-control" :id "ne"}]
-
-                                  ]
                                  [:div {:class "form-group"}
                                   [:label {:for "na"} [:b "Autor knjige:"]]
                                   [:select {:name "author" :id "na" :class "form-control"}
@@ -924,13 +998,15 @@
                                        [:b "Dogodila se greska prilikom ucitavanja autora!"]))
                                    ]
                                   ]
+
+
                                  [:input {:type "submit" :read-only "false"
-                                          :value "Ubaci novu knjigu"
+                                          :value "Ubaci knjigu "
                                           :class "btn btn-primary"
                                           }]
                                  (h "   ")
                                  [:input {:type "reset"
-                                          :value "Resetuj sve vrednosti"
+                                          :value "Resetuj vrednosti"
                                           :class "btn btn-warning"
                                           }])
                       ]]
@@ -941,7 +1017,7 @@
                  )
   )
 
-(defn insert-new-book [namebook typeofbook year numberofexample author]
+(defn insert-new-book [namebook genre year author]
   (layout/pagelayout "Biblioteka" (menu/menuapp)
                  [:br]
                  [:div {:class "container"}
@@ -961,10 +1037,16 @@
                                     )
                                   ]
                                  [:div {:class "form-group"}
-                                  [:label {:for "tb"} [:b "Zanr knjige:"] ]
-                                  [:input {:type "text" :name "typeofbook" :class "form-control" :id "tb" :value typeofbook} ]
-                                  (if (or (nil? typeofbook) (empty? typeofbook))
-                                    [:label {:for "tb" :style"color:red"} [:b "Morate da unesete zanr knjige!!!"] ])
+                                  [:label {:for "zn"} [:b "Zanr:"]]
+                                  [:select {:name "genre" :id "zn" :class "form-control"}
+                                   (try
+                                     (for [zanr (db/select-genre-order-name)]
+                                       [:option {:value (:zanrid zanr)} (:nazivzanra zanr)]
+                                       )
+
+                                     (catch Exception e
+                                       [:b "Dogodila se greska prilikom ucitavanja zanra!"]))
+                                   ]
                                   ]
 
                                  [:div {:class "form-group"}
@@ -981,20 +1063,6 @@
                                   ]
 
                                  [:div {:class "form-group"}
-                                  [:label {:for "ne"} [:b "Broj primeraka :"]]
-                                  [:input {:type "text" :name "numberofexample" :class "form-control" :id "ne" :value numberofexample} ]
-                                  (if (or (nil? numberofexample) (empty? numberofexample))
-                                    [:label {:for "ne" :style"color:red"} [:b "Morate da unesete broj primeraka!!!"] ]
-                                    (try
-                                      (Integer/parseInt numberofexample)
-                                      [:label {:for "ne" :style"color:red"} [:b ""] ]
-                                      (catch Exception e
-                                        [:label {:for "ne" :style"color:red"} [:b "Morate da unesete broj!!!"] ]))
-                                    )
-                                  ]
-
-
-                                 [:div {:class "form-group"}
                                   [:label {:for "na"} [:b "Autor:"]]
                                   [:select {:name "author" :id "na" :class "form-control"}
                                    (try
@@ -1007,7 +1075,7 @@
                                    ]
                                   ]
                                  [:input {:type "submit"
-                                          :value "Ubaci novu knjigu"
+                                          :value "Ubaci novu knigu"
                                           :class "btn btn-primary"
                                           }]
                                  (h "   ")
@@ -1015,11 +1083,11 @@
                                                                      :value "Resetuj sve vrednosti"
                                                                      :class "btn btn-warning"}]])]]]
                    [:div {:class "col"}
-                    (if (or (nil? namebook) (nil? typeofbook) (nil? year) (nil? numberofexample) (empty? namebook) (empty? typeofbook) (empty? year) (empty? numberofexample))
+                    (if (or (nil? namebook)  (nil? year)  (empty? namebook)  (empty? year))
                       ""
                       (try
 
-                        (db/insert-book namebook typeofbook year numberofexample author)
+                        (db/insert-book namebook genre year author)
                         [:p {:style "color:green; border-color: #000000;"} [:b (str "Uspesno ubacena knjiga " namebook "!!!")] ]
                         (catch Exception e
                           [:p {:style "color:red; border-color: #000000;"} [:b (str "Nije ubacena knjiga!!!" namebook )] ]
@@ -1048,8 +1116,18 @@
                                       [:input {:type "text" :name "namebook" :class "form-control" :id "nb" :value (:nazivpublikacije book)}]
                                       ]
                                      [:div {:class "form-group"}
-                                      [:label {:for "tb"} [:b "Zanr knjige:"] ]
-                                      [:input {:type "text" :name "typeofbook" :class "form-control" :id "tb" :value (:tippublikacije book)} ]
+                                      [:label {:for "zn"} [:b "Zanr knjige:"]]
+                                      [:input {:type "text" :name "control" :class "form-control" :id "zn" :readonly "true" :style "border-color: #000000;" :value (:nazivzanra book)} ]
+                                      [:label {:for "zn"} [:b "Zameni zanr:"]]
+                                      [:select {:name "genre" :id "zn" :class "form-control"}
+                                       (try
+                                         (for [book (db/select-genre-order-name)]
+                                           [:option {:value (:zanrid book)} (:nazivzanra book)]
+                                           )
+
+                                         (catch Exception e
+                                           [:b "Dogodila se greska prilikom ucitavanja autora!"]))
+                                       ]
                                       ]
 
                                      [:div {:class "form-group"}
@@ -1058,8 +1136,8 @@
                                       ]
 
                                      [:div {:class "form-group"}
-                                      [:label {:for "ne"}[:b "Broj primeraka:"]]
-                                      [:input {:type "text" :name "numberofexample" :class "form-control" :id "ne" :value (:brojprimeraka book)}]
+                                      [:label {:for "ne"}[:b "Status:"]]
+                                      [:input {:type "text" :name "status" :class "form-control" :id "ne" :value (:status book)}]
                                       ]
                                      [:div {:class "form-group"}
                                       [:label {:for "at"} [:b "Autor:"]]
@@ -1092,7 +1170,7 @@
                    [:div {:class "col"}]]])
   )
 
-(defn update-this-book [id namebook typeofbook year numberofexample author]
+(defn update-this-book [id namebook genre year status author]
   (layout/pagelayout "Biblioteka" (menu/menuapp)
                  [:br]
                  [:div {:class "container"}
@@ -1115,11 +1193,16 @@
                                       ]
 
                                      [:div {:class "form-group"}
-                                      [:label {:for "tb"} [:b "Zanr knjige:"] ]
-                                      [:input {:type "text" :name "typeofbook" :class "form-control" :id "tb" :value typeofbook}]
-                                      (if (or (nil? typeofbook) (empty? typeofbook) )
-                                        [:label {:for "tb" :style"color:red"} [:b "Morate da unesete zanr knjige!!!"] ]
-                                        )
+                                      [:label {:for "zn"} [:b "Zanr knjige:"]]
+                                      [:select {:name "genre" :id "zn" :class "form-control"}
+                                       (try
+                                         (for [book (db/select-genre-order-name)]
+                                           [:option {:value (:zanrid book)} (:nazivzanra book)]
+                                           )
+
+                                         (catch Exception e
+                                           [:b "Dogodila se greska prilikom ucitavanja autora!"]))
+                                       ]
                                       ]
 
                                      [:div {:class "form-group"}
@@ -1135,15 +1218,11 @@
                                       ]
 
                                      [:div {:class "form-group"}
-                                      [:label {:for "ne"} [:b "Broj primeraka:"] ]
-                                      [:input {:type "text" :name "numberofexample" :class "form-control" :id "ne" :value numberofexample} ]
-                                      (if (or (nil? numberofexample) (empty? numberofexample))
-                                        [:label {:for "ne" :style"color:red"} [:b "Morate da unesete broj primeraka!!!"] ]
-                                        (try
-                                          (Integer/parseInt numberofexample)
-                                          [:label {:for "ne" :style"color:red"} [:b ""] ]
-                                          (catch Exception e
-                                            [:label {:for "ne" :style"color:red"} [:b "Morate da unesete broj!!!"] ])))
+                                      [:label {:for "ne"} [:b "Status:"] ]
+                                      [:input {:type "text" :name "status" :class "form-control" :id "ne" :value status}]
+                                      (if (or (nil? status) (empty? status) )
+                                        [:label {:for "ne" :style"color:red"} [:b "Morate da unesete status knjige(da li je dostupna ili ne)!!!"] ]
+                                        )
                                       ]
 
 
@@ -1160,7 +1239,7 @@
                                        ]
                                       ]
                                      [:input {:type "submit"
-                                              :value "Izmeni igraca"
+                                              :value "Izmeni knjigu"
                                               :class "btn btn-primary"
                                               }]
                                      (h "   ")
@@ -1172,10 +1251,10 @@
                         ))
                     ]
                    [:div {:class "col"}
-                    (if (or (nil? namebook) (nil? typeofbook) (nil? year) (nil? numberofexample) (empty? namebook) (empty? typeofbook) (empty? year) (empty? numberofexample))
+                    (if (or (nil? namebook)  (nil? year) (nil? status) (empty? namebook)  (empty? year) (empty? status))
                       ""
                       (try
-                        (db/update-book id namebook typeofbook year numberofexample author)
+                        (db/update-book id namebook genre year status author)
                         [:p {:style "color:green; border-color: #000000;"} [:b (str "Uspesno izmenjena knjiga " namebook "!!!")] ]
                         (catch Exception e
                           [:p {:style "color:red; border-color: #000000;"} [:b (str "Nije izmenjena knjiga!!!" namebook )] ]
@@ -1183,6 +1262,709 @@
                     ]]
                   ])
   )
+
+; STRANA ZA BRISANJE KNJIGE
+(defn show-books-for-delete []
+
+  [:div {:class "container"}
+   [:div {:class "row"}
+    [:div {:class "col-6"}
+     (f/form-to [:get "/deleteThisBook"]
+                (anti-forgery-field)
+                [:div {:class "form-group"}
+                 [:label {:for "nb"} [:b "Unesite naziv knjige :"]]
+                 [:input {:type "text" :name "namebook" :class "form-control" :id "nb"}]
+                 ]
+                [:input {:type  "submit"
+                         :value "Obrisi knjigu"
+                         :class "btn btn-danger"
+                         }]
+                (h "   ")
+                [:a {:href "/deleteBook"} [:input {:type  "button"
+                                                     :value "Resetuj  sve vrednosti"
+                                                     :class "btn btn-warning"}]]
+                )
+
+     ]
+    [:div {:class "col-10"}
+     [:h2 [:b "Prikaz svih knjiga"]]
+     [:br]
+     [:table
+      [:thead
+       [:tr
+        [:th "Naziv knjige"]
+        [:th "Ime pisca knjige"]
+        [:th "Prezime pisca knjige"]
+        [:th "Godina izdanja"]
+        [:th "Zanr knjige"]
+        [:th "Status"]
+        ]]
+
+      (into [:tbody]
+            (try
+              (for [book (db/select_all_books)]
+                [:tr [:td (:nazivpublikacije book)]
+                 [:td (:imeautora book)]
+                 [:td (:prezimeautora book)]
+                 [:td (:godinaizdanja book)]
+                 [:td (:nazivzanra book)]
+                 [:td (:status book)]
+                 ])
+              (catch Exception e
+                [[:b "Dogodila se greska prilikom ucitavanja knjige!"]]
+                ))
+            )]
+     ]
+    [:div {:class "col"}]]]
+
+  )
+(defn select-books-for-delete []
+  (try
+    (layout/pagelayout "Biblioteka" (menu/menuapp)
+                       [:br]
+                       [:br]
+                       [:br]
+                       [:br]
+                       (show-books-for-delete))
+    (catch Exception e
+      (throw (Exception. e))))
+  )
+
+(defn show-books-which-delete [namebook]
+  [:div {:class "container"}
+   [:div {:class "row"}
+    [:div {:class "col-6"}
+     (if (or (nil? namebook) (empty? namebook))
+       ""
+       (try
+         (if (empty? (db/select-book-by-name namebook))
+           [:p {:style "color:red; border-color: #000000;"} [:b (str "Knjiga " namebook " koju zelite da obrisete ne postoji!!!")]]
+           (try
+             (db/delete-book-by-name namebook)
+             [:p {:style "color:green; border-color: #000000;"} [:b (str "Knjiga " namebook "  je uspesno obrisana!!!")]]
+             (catch Exception e
+               [:p {:style "color:red; border-color: #000000;"} [:b (str "Knjiga " namebook " koju zelite da obrisete ne postoji!!!")]]
+               )))
+
+
+         (catch Exception e
+           [:p {:style "color:red; border-color: #000000;"} [:b (str "Nije obrisan knjiga " namebook "!!!")]]
+
+           )))
+     (f/form-to [:get "/deleteThisBook"]
+                (anti-forgery-field)
+                [:div {:class "form-group"}
+                 [:label {:for "nb"} [:b "Unesite naziv knjige :"]]
+                 [:input {:type "text" :name "namebook" :class "form-control" :id "nb" :value namebook}]
+                 (if (or (nil? namebook) (empty? namebook))
+                   (empty-name-of-book)
+                   )
+                 ]
+                [:input {:type  "submit"
+                         :value "Obrisi knjigu"
+                         :class "btn btn-danger"
+                         }]
+                (h "   ")
+                [:a {:href "/deleteBook"} [:input {:type  "button"
+                                                     :value "Resetuj sve vrednosti"
+                                                     :class "btn btn-warning"}]]
+                )
+
+     ]
+    [:div {:class "col-10"}
+     [:h2 [:b "Prikaz svih knjiga" ]]
+     [:br]
+     [:table {:class "table table-dark"}
+      [:thead
+       [:tr
+        [:th "Naziv knjige"]
+        [:th "Ime pisca knjige"]
+        [:th "Prezime pisca knjige"]
+        [:th "Godina izdanja knjige"]
+        [:th "Zanr knjige"]
+        [:th "Status"]
+
+
+        ]]
+
+      (into [:tbody]
+            (try
+              (for [book (db/select_all_books)]
+                [:tr [:td (:nazivpublikacije book)]
+                 [:td (:imeautora book)]
+                 [:td (:prezimeautora book)]
+                 [:td (:godinaizdanja book)]
+                 [:td (:nazivzanra book)]
+                 [:td (:status book)]
+                 ])
+              (catch Exception e
+                [[:b "Dogodila se greska prilikom ucitavanja knjige!"]]
+                ))
+            )]
+     ]
+    [:div {:class "col-8"}
+
+     ]]]
+  )
+(defn select-books-which-delete [namebook]
+  (try
+    (layout/pagelayout "Biblioteka" (menu/menuapp)
+                       [:br]
+                       [:br]
+                       [:br]
+                       [:br]
+                       (show-books-which-delete namebook))
+    (catch Exception e
+      (throw (Exception. e))))
+  )
+
+
+
+
+; STRANA ZA UBACIVANJE EVIDENCIJE!!!!!!!!!!!!!!!!!!
+(defn insert-data-for-member-page []
+  (layout/pagelayout "Biblioteka" (menu/menuapp)
+                     [:br]
+                     [:div {:class "container"}
+                      [:div {:class "row"}
+                       [:div {:class "col"}]
+                       [:div {:class "col-6"}
+                        [:h3 [:b "Unos novog autora"]]
+                        [:div {:class "tab-content"}
+                         [:div {:class "tab-pane active" :role "tabpanel"}
+                          (f/form-to [:get "/insertNewDataForMember"]
+                                     (anti-forgery-field)
+
+                                     [:div {:class "form-group"}
+                                      [:label {:for "namemember"} [:b "Prezime clana:"]]
+                                      [:select {:name "surnamemember" :id "namemember" :class "form-control"}
+                                       (try
+                                         (for [surnamemember (db/select-name-member-order-name)]
+                                           [:option {:value (:jmbg surnamemember)} (:prezime surnamemember)]
+                                           )
+
+                                         (catch Exception e
+                                           [:b "Dogodila se greska prilikom ucitavanja clana!"]))
+                                       ]
+                                      ]
+
+                                     [:div {:class "form-group"}
+                                      [:label {:for "namebook"} [:b "Naziv knjige:"]]
+                                      [:select {:name "nameofbook" :id "namebook" :class "form-control"}
+                                       (try
+                                         (for [nameofbook (db/select-namebook-order-name)]
+                                           [:option {:value (:idpublikacije nameofbook)} (:nazivpublikacije nameofbook)]
+                                           )
+
+                                         (catch Exception e
+                                           [:b "Dogodila se greska prilikom ucitavanja publikacije!"]))
+                                       ]
+                                      ]
+
+                                     [:div {:class "form-group"}
+                                      [:label {:for "datetake"} [:b "Datum uzimanja knjige"]]
+                                      [:input {:type "text" :name "dateoftake" :class "form-control" :id "datetake"}]
+
+                                      ]
+
+                                     [:div {:class "form-group"}
+                                      [:label {:for "note"} [:b "Napomena"]]
+                                      [:input {:type "text" :name "notes" :class "form-control" :id "note"}]
+                                      ]
+
+
+
+
+
+
+                                     [:input {:type  "submit" :read-only "false"
+                                              :value "Ubaci novog evidenciju"
+                                              :class "btn btn-success"
+                                              }]
+                                     (h "   ")
+                                     [:input {:type  "reset"
+                                              :value "Resetuj vrednosti"
+                                              :class "btn btn-warning"
+                                              }])
+                          ]]
+
+                        ]
+                       [:div {:class "col"}]]
+                      ]
+                     )
+  )
+
+
+
+
+
+(defn insert-new-data-memberpage [surnamemember nameofbook dateoftake notes]
+  (layout/pagelayout "Biblioteka" (menu/menuapp)
+                     [:br]
+                     [:div {:class "container"}
+                      [:div {:class "row"}
+                       [:div {:class "col"}]
+                       [:div {:class "col-6"}
+                        [:h3 [:b "Unos podataka o iznajmljivanju knjige"]]
+                        [:div {:class "tab-content"}
+                         [:div {:class "tab-pane active" :role "tabpanel"}
+                          (f/form-to [:get "/insertNewDataForMember"]
+                                     (anti-forgery-field)
+
+                                     [:div {:class "form-group"}
+                                      [:label {:for "namemember"} [:b "Prezime clana:"]]
+                                      [:select {:name "surnamemember" :id "namemember" :class "form-control"}
+                                       (try
+                                         (for [surnamemember (db/select-name-member-order-name)]
+                                           [:option {:value (:jmbg surnamemember)} (:prezime surnamemember)]
+                                           )
+
+                                         (catch Exception e
+                                           [:b "Dogodila se greska prilikom ucitavanja clana!"]))
+                                       ]
+                                      ]
+
+                                     [:div {:class "form-group"}
+                                      [:label {:for "namebook"} [:b "Naziv knjige:"]]
+                                      [:select {:name "nameofbook" :id "namebook" :class "form-control"}
+                                       (try
+                                         (for [nameofbook (db/select-namebook-order-name)]
+                                           [:option {:value (:idpublikacije nameofbook)} (:nazivpublikacije nameofbook)]
+                                           )
+
+                                         (catch Exception e
+                                           [:b "Dogodila se greska prilikom ucitavanja publikacije!"]))
+                                       ]
+                                      ]
+
+                                     [:div {:class "form-group"}
+                                      [:label {:for "datetake"} [:b "Datum uzimanja knjige:"]]
+                                      [:input {:type "text" :name "dateoftake" :class "form-control" :id "datetake" :value dateoftake}]
+                                      (if (or (nil? dateoftake) (empty? dateoftake))
+                                        (empty-datein)
+                                        (try
+                                          (ftime/parse (ftime/formatter "YYYY-MM-dd") dateoftake)
+                                          [:label {:for "datet" :style "color:red"} [:b ""]]
+                                          (catch Exception e
+                                            (dateofin-format))))
+                                      ]
+
+
+                                     [:div {:class "form-group"}
+                                      [:label {:for "note"} [:b "Napomena*:"]]
+                                      [:input {:type "text" :name "notes" :class "form-control" :id "note" :value notes}]
+                                      ]
+
+
+                                     [:input {:type  "submit"
+                                              :value "Ubaci novog evidenciju o iznajmljivanju"
+                                              :class "btn btn-success"
+                                              }]
+                                     (h "   ")
+                                     [:a {:href "/insertNewDataMember"} [:input {:type  "button"
+                                                                          :value "Resetuj  sve vrednosti"
+                                                                          :class "btn btn-warning"}]])]]]
+                       [:div {:class "col"}
+                        (if (or (nil? dateoftake) (nil? notes)   (empty? dateoftake) (empty? notes))
+                          ""
+                          (try
+                            (if (empty? (db/select-record-by-member surnamemember nameofbook))
+
+
+                              (try
+                                [:p {:style "color:red; border-color: #000000;"} [:b (str "Nece da moze ponovo!!!" surnamemember)]]
+                                (db/insert-new-record-for-member surnamemember nameofbook dateoftake notes)
+                                (db/update-name-book-for-member nameofbook)
+                                (success-insert-new-record-for-member surnamemember)
+                                (catch Exception e
+                                  [:p {:style "color:red; border-color: #000000;"} [:b (str "ZAAAASTTTTOOOOO!!!!Nije ubacen nova evidencija za clana!!!" surnamemember)]]
+
+                                  ))
+
+                              )
+
+
+                            (catch Exception e
+
+                              [:p {:style "color:red; border-color: #000000;"} [:b (str "Nije ubacen!!!")]]
+                              (exist-record-of-member surnamemember)
+                              )))
+                        ]]
+                      ])
+  )
+
+;;PRIKAZIVANJE EVIDENCIJA
+(defn show-records []
+  [:div {:class "container"}
+   [:div {:class "row"}
+    [:div {:class "col-6"}
+     (f/form-to [:get "/showAllRecords"]
+                (anti-forgery-field)
+                [:div {:class "form-group"}
+                 [:label {:for "surmem"} [:b "Unesite prezime clana cija iznajmljene knjige zelite da prikazete:"] ]
+                 [:input {:type "text" :name "surnameMember" :class "form-control" :id "surmem"}]
+                 ]
+                [:input {:type "submit"
+                         :value "Prikazi knjige"
+                         :class "btn btn-primary"
+                         }]
+                (h "   ")
+                [:a {:href "/showRecords"}[:input {:type "button"
+                                                 :value "Resetuj sve vrednosti"
+                                                 :class "btn btn-warning"}]]
+                )
+
+     ]
+    [:div {:class "col-10"}
+
+     ]
+    [:div {:class "col"}]]]
+  )
+(defn select-records []
+  (try
+    (layout/pagelayout "Biblioteka" (menu/menuapp)
+                       [:br]
+                       [:br]
+                       [:br]
+                       [:br]
+                       [:br]
+                       [:br]
+                       (show-records))
+    (catch Exception e
+      (throw (Exception. e))))
+  )
+
+(defn show-all-records [surnameMember]
+  [:div {:class "container"}
+   [:div {:class "row"}
+    [:div {:class "col-6"}
+     (if (or (nil? surnameMember) (empty? surnameMember))
+       ""
+
+       (try
+         (if (empty? (db/select-member-by-surname surnameMember))
+           [:p {:style "color:red; border-color: #000000;"} [:b (str "Clan " surnameMember " cija iznajmljene knjige zelite da prikazete ne postoji!!!")] ]
+           (try
+             (= (count (db/select_records surnameMember)) 0)
+             [:p {:style "color:green; border-color: #000000;"} [:b (str "Evidencije o iznajmljenim knjigama za  " surnameMember "-a su uspesno prikazana!!!")] ]
+             (catch Exception e
+               [:p {:style "color:red; border-color: #000000;"} [:b (str "Clan " surnameMember " cija evidencije zelite da prikazete ne postoji!!!")] ]
+               )))
+
+
+
+         (catch Exception e
+           [:p {:style "color:red; border-color: #000000;"} [:b (str "Nisu prikazana evidencije o iznajmljenim knjigama od " surnameMember "-a!!!")] ]
+
+
+           ))
+
+
+
+
+
+
+       )
+     (f/form-to [:get "/showAllRecords"]
+                (anti-forgery-field)
+                [:div {:class "form-group"}
+                 [:label {:for "surmem"} [:b "Unesite prezime clana cije evidencije o iznajmljenim knjigama zelite da prikazete:"] ]
+                 [:input {:type "text" :name "surnameMember" :class "form-control" :id "surmem" :value surnameMember}]
+                 (if (or (nil? surnameMember) (empty? surnameMember) )
+                   (empty-surname-member)
+                   )
+                 ]
+                [:input {:type "submit"
+                         :value "Prikazi evidencije"
+                         :class "btn btn-primary"
+                         }]
+                (h "   ")
+                [:a {:href "/showRecords"}[:input {:type "button"
+                                                 :value "Resetuj sve vrednosti"
+                                                 :class "btn btn-warning"}]]
+                )
+
+     ]
+    [:div {:class "col-10"}
+     [:h2 [:b "Prikaz svih evidencija o iznajmljenim knjigama" ]]
+     [:br]
+     [:table {:class "table table-dark"}
+      [:thead
+       [:tr
+        [:th "Naziv knjige"]
+        [:th "Ime pisca knjige"]
+        [:th "Prezime pisca knjige"]
+        [:th "Datum uzimanja knjige"]
+        [:th "Datum vracanja knjige"]
+        [:th "Napomena"]
+        [:th "Izmeni evidenciju"]
+        ]]
+
+      (into [:tbody]
+            (try
+              (for [record (db/select_records surnameMember)]
+                [:tr [:td (:nazivpublikacije record)]
+                 [:td (:imeautora record)]
+                 [:td (:prezimeautora record)]
+                 [:td (:datumuzimanjaknjige record)]
+                 [:td (:datumvracanjaknjige record)]
+                 [:td (:napomena record)]
+                 [:td [:a {:href (str "/updateRecord/" (h (:publikacijaid record)) "/" (h (:jmbg record)) ) :style "color:purple;"} "Izmeni"]]])
+              (catch Exception e
+                [[:b "Dogodila se greska prilikom ucitavanja evidencija!"]]
+                ;(throw (Exception. e))
+                ))
+            )]
+     ]
+    [:div {:class "col-8"}
+
+     ]]]
+  )
+
+(defn select-all-records [nameBook]
+  (try
+    (layout/pagelayout "Biblioteka" (menu/menuapp)
+                       [:br]
+                       [:br]
+                       [:br]
+                       [:br]
+                       [:br]
+                       [:br]
+                       (show-all-records nameBook))
+    (catch Exception e
+      (throw (Exception. e))))
+  )
+
+(defn show-all-the-records [surnameMember]
+  [:div {:class "container"}
+   [:div {:class "row"}
+    [:div {:class "col-6"}
+     (if (or (nil? surnameMember) (empty? surnameMember))
+       ""
+       (try
+         (if (empty? (db/select-member-by-surname surnameMember))
+
+           (try
+             (db/select_records surnameMember)
+
+             (catch Exception e
+
+               )))
+
+
+         (catch Exception e
+
+
+
+           )))
+     (f/form-to [:get "/showAllRecords"]
+                (anti-forgery-field)
+                [:div {:class "form-group"}
+                 [:label {:for "surmem"} [:b "Unesite prezime clana cije dela zelite da prikazete:"] ]
+                 [:input {:type "text" :name "surnameMember" :class "form-control" :id "surmem" :value surnameMember}]
+
+                 ]
+                [:input {:type "submit"
+                         :value "Prikazi evidencije"
+                         :class "btn btn-primary"
+                         }]
+                (h "   ")
+                [:a {:href "/showRecords"}[:input {:type "button"
+                                                 :value "Resetuj sve vrednosti"
+                                                 :class "btn btn-warning"}]]
+                )
+
+     ]
+    [:div {:class "col-10"}
+     [:h2 [:b "Prikaz svih evidencija" ]]
+     [:br]
+     [:table {:class "table table-dark"}
+      [:thead
+       [:tr
+        [:th {:style "border-style: solid;  border-color: #000000;    background-color: red;    color: black;"} "Naziv knjige"  ]
+        [:th {:style "border-style: solid;  border-color: #000000;    background-color: red;    color: black;"} "Ime pisca knjige"  ]
+        [:th {:style "border-style: solid;  border-color: #000000;    background-color: red;    color: black;"} "Prezime pisca knjige"  ]
+        [:th {:style "border-style: solid;  border-color: #000000;    background-color: red;    color: black;"} "Datum uzmimanja knjige"  ]
+        [:th {:style "border-style: solid;  border-color: #000000;    background-color: red;    color: black;"}"Datum vracanja knjige" ]
+        [:th {:style "border-style: solid;  border-color: #000000;    background-color: red;    color: black;"}"Napomena"  ]
+        [:th {:style "border-style: solid;  border-color: #000000;    background-color: red;    color: black;"} "Izmeni knjigu"]
+        ]]
+
+      (into [:tbody]
+            (try
+              (for [record (db/select_records surnameMember)]
+                [:tr [:td {:style "border-style: solid;  border-color: #000000;    background-color: yellow;    color: black;"} (:nazivpublikacije record)]
+                 [:td {:style "border-style: solid;  border-color: #000000;    background-color: yellow;    color: black;"} (:datumuzimanjaknjige record)]
+                 [:td {:style "border-style: solid;  border-color: #000000;    background-color: yellow;    color: black;"} (:imeautora record)]
+                 [:td {:style "border-style: solid;  border-color: #000000;    background-color: yellow;    color: black;"} (:prezimeautora record)]
+                 [:td {:style "border-style: solid;  border-color: #000000;    background-color: yellow;    color: black;"} (:datumvracanjaknjige record)]
+                 [:td {:style "border-style: solid;  border-color: #000000;    background-color: yellow;    color: black;"} (:napomena record)]
+                 [:td {:style "border-style: solid;  border-color: #000000;    background-color: yellow;    color: black;"}  [:a {:href (str "/updateRecord/" (h (:idpublikacije record))) :style "color:purple;"} "Izmeni"]]])
+              (catch Exception e
+                [[:b "Dogodila se greska prilikom ucitavanja evidencija!"]]
+                ;(throw (Exception. e))
+                ))
+            )]
+     ]
+    [:div {:class "col-8"}
+
+     ]]]
+  )
+
+(defn select-all-the-records[surnameMember]
+  (try
+    (layout/pagelayout "Biblioteka" (menu/menuapp)
+                       [:br]
+                       [:br]
+                       [:br]
+                       [:br]
+                       [:br]
+                       [:br]
+                       (show-all-the-records surnameMember))
+    (catch Exception e
+      (throw (Exception. e))))
+  )
+
+
+; STRANA ZA UPDATE EVIDENCIJA !!!!!!!!!!!!!!
+(defn update-record [publikacijaid jmbg]
+  (layout/pagelayout "Biblioteka" (menu/menuapp)
+                     [:br]
+                     [:div {:class "container"}
+                      [:div {:class "row"}
+                       [:div {:class "col"}]
+                       [:div {:class "col-6"}
+                        [:h2 [:b "Izmena evidencije" ]]
+                        (try
+                          (for [record (db/select-record-by-publicationid-jmbg publikacijaid)]
+                            [:div {:class "tab-content" }
+                             [:div {:class "tab-pane active" :role "tabpanel"}
+                              (f/form-to [:get (str "/updateThisRecord/" publikacijaid "/" jmbg)]
+                                         (anti-forgery-field)
+                                         [:div {:class "form-group"}
+                                          [:label {:for "nb"} [:b "Naziv knjige:"] ]
+                                          [:input {:type "text" :name "namebook" :class "form-control" :id "nb" :value (:nazivpublikacije record)}]
+                                          ]
+                                         [:div {:class "form-group"}
+                                          [:label {:for "datet"} [:b "Datum uzimanja knjige:"] ]
+                                          [:input {:type "text" :name "dateoftake" :class "form-control" :id "datet" :value (:datumuzimanjaknjige record)}]
+                                          ]
+                                         [:div {:class "form-group"}
+                                          [:label {:for "dater"} [:b "Datum vracanja knjige:"] ]
+                                          [:input {:type "text" :name "dateofreturn" :class "form-control" :id "dater" :value (:datumvracanjaknjige record)}]
+                                          ]
+                                         [:div {:class "form-group"}
+                                          [:label {:for "note"} [:b "Napomena:"] ]
+                                          [:input {:type "text" :name "notes" :class "form-control" :id "note" :value (:napomena record)}]
+                                          ]
+
+
+                                         [:input {:type "submit"
+                                                  :value "Izmeni evidenciju"
+                                                  :class "btn btn-primary"
+                                                  }]
+                                         (h "   ")
+                                         [:a {:href (str "/updateRecord/" publikacijaid "/" jmbg) }[:input {:type "button"
+                                                                                      :value "Resetuj sve vrednosti"
+                                                                                      :class "btn btn-warning"}]])]])
+                          (catch Exception e
+                            [:p {:style "color:red; border-color: #000000;"} [:b (str "Nazalost, doslo je do greske prilikom ucitavanja evidencije!!!")] ]
+                            ))
+
+                        ]
+                       [:div {:class "col"}]]])
+  )
+
+(defn update-this-record [publikacijaid jmbg namebook dateoftake dateofreturn notes]
+  (layout/pagelayout "Biblioteka" (menu/menuapp)
+                     [:br]
+                     [:div {:class "container"}
+                      [:div {:class "row"}
+                       [:div {:class "col"}]
+                       [:div {:class "col-6"}
+                        [:h2 [:b "Izmena evidencije" ]]
+                        (try
+                          (for [record (db/select-record-by-publicationid-jmbg publikacijaid)]
+                            [:div {:class "tab-content" }
+                             [:div {:class "tab-pane active" :role "tabpanel"}
+                              (f/form-to [:get (str "/updateThisRecord/" publikacijaid "/" jmbg)]
+                                         (anti-forgery-field)
+                                         [:div {:class "form-group"}
+                                          [:label {:for "nb"} [:b "Naziv knjige:"] ]
+                                          [:input {:type "text" :name "namebook" :class "form-control" :id "nb" :value namebook}]
+                                          (if (or (nil? namebook) (empty? namebook) )
+                                            [:label {:for "nb" :style"color:red"} [:b "Morate da unesete naziv knjige!!!"] ]
+                                            )
+                                          ]
+
+                                         [:div {:class "form-group"}
+                                          [:label {:for "datet"} [:b "Datum uzimanja knjige:"]]
+                                          [:input {:type "text" :name "dateoftake" :class "form-control" :id "datet" :value dateoftake}]
+                                          (if (or (nil? dateoftake) (empty? dateofreturn))
+                                            (empty-dateofentry)
+                                            (try
+                                              (ftime/parse (ftime/formatter "YYYY-MM-dd") dateoftake)
+                                              [:label {:for "datein" :style "color:red"} [:b ""]]
+                                              (catch Exception e
+                                                (dateofin-format))))
+                                          ]
+
+
+
+                                         [:div {:class "form-group"}
+                                          [:label {:for "dater"} [:b "Datum rodjenja:"]]
+                                          [:input {:type "text" :name "dateofreturn" :class "form-control" :id "dater" :value dateofreturn}]
+                                          (if (or (nil? dateofreturn) (empty? dateofreturn))
+                                            (empty-dateout)
+                                            (try
+                                              (ftime/parse (ftime/formatter "YYYY-MM-dd") dateofreturn)
+                                              [:label {:for "dateout" :style "color:red"} [:b ""]]
+                                              (catch Exception e
+                                                (dateofout-format))))
+                                          ]
+
+                                         [:div {:class "form-group"}
+                                          [:label {:for "note"} [:b "Status:"] ]
+                                          [:input {:type "text" :name "notes" :class "form-control" :id "ne" :value notes}]
+                                          (if (or (nil? notes) (empty? notes) )
+                                            [:label {:for "nt" :style"color:red"} [:b "Morate da unesete napomenu o ovoj evidenciji)!!!"] ]
+                                            )
+                                          ]
+
+
+
+                                         [:input {:type "submit"
+                                                  :value "Izmeni knjigu"
+                                                  :class "btn btn-primary"
+                                                  }]
+                                         (h "   ")
+                                         [:a {:href (str "/updateRecord/" publikacijaid "/" jmbg)}[:input {:type "button"
+                                                                                     :value "Resetuj sve vrednosti"
+                                                                                     :class "btn btn-warning"}]])]]
+                            )
+                          (catch Exception e
+                            ))
+                        ]
+                       [:div {:class "col"}
+                        (if (or (nil? namebook)  (nil? dateoftake) (nil? dateofreturn) (nil? notes) (empty? namebook)  (empty? dateoftake) (empty? dateofreturn) (empty? notes))
+                          ""
+                          (try
+                            (db/update-record publikacijaid jmbg dateoftake dateofreturn notes )
+                            (db/update-status-book-for-member-after-update publikacijaid)
+                            (db/delete-record-for-member-after-update publikacijaid)
+                            [:p {:style "color:green; border-color: #000000;"} [:b (str "Uspesno izmenjena evidencija " namebook "!!!")] ]
+                            (catch Exception e
+                              [:p {:style "color:red; border-color: #000000;"} [:b (str "Nije izmenjena evidencija!!!" namebook )] ]
+                              )))
+                        ]]
+                      ])
+  )
+
+
+
+
+
+
 
 (defn pick-author []
   (layout/pagelayout "Biblioteka" (menu/menuapp)
@@ -1472,6 +2254,179 @@
                  )
   )
 
+;;UBACI NOVOG CLANA
+(defn insert-new-member-page [jmbg name surname email phone dateofentry]
+  (layout/pagelayout "Biblioteka" (menu/menuapp)
+                     [:br]
+                     [:div {:class "container"}
+                      [:div {:class "row"}
+                       [:div {:class "col"}]
+                       [:div {:class "col-6"}
+                        [:h3 [:b "Unos novog clana"]]
+                        [:div {:class "tab-content"}
+                         [:div {:class "tab-pane active" :role "tabpanel"}
+                          (f/form-to [:get "/insertNewMember"]
+                                     (anti-forgery-field)
+
+                                     [:div {:class "form-group"}
+                                      [:label {:for "jm"} [:b "JMBG novog clana:"]]
+                                      [:input {:type "text" :name "jmbg" :class "form-control" :id "jm" :value jmbg} ]
+                                      (if (or (nil? jmbg) (empty? jmbg))
+                                        (empty-member-jmbg)
+                                        )
+                                      ]
+
+                                     [:div {:class "form-group"}
+                                      [:label {:for "n"} [:b "Ime novog clana:"]]
+                                      [:input {:type "text" :name "name" :class "form-control" :id "n" :value name} ]
+                                      (if (or (nil? name) (empty? name))
+                                        (empty-member-name)
+                                        )
+                                      ]
+                                     [:div {:class "form-group"}
+                                      [:label {:for "s"} [:b "Prezime novog clana:"]]
+                                      [:input {:type "text" :name "surname" :class "form-control" :id "s" :value surname} ]
+                                      (if (or (nil? surname) (empty? surname))
+                                        (empty-member-surname)
+                                        )
+                                      ]
+
+                                     [:div {:class "form-group"}
+                                      [:label {:for "ml"} [:b "Email:"]]
+                                      [:input {:type "email" :name "email" :class "form-control" :id "ml" :value email}]
+                                      (if (or (nil? email) (empty? email))
+                                        (empty-mail)
+                                        )
+
+
+
+
+                                      ]
+
+                                     [:div {:class "form-group"}
+                                      [:label {:for "ph"} [:b "Broj telefona:"]]
+                                      [:input {:type "text" :name "phone" :class "form-control" :id "ph" :value phone} ]
+                                      (if (or (nil? phone) (empty? phone))
+                                        (empty-phone)
+                                        )
+                                      ]
+
+
+                                     [:div {:class "form-group"}
+                                      [:label {:for "den"} [:b "Datum uclanjena:"]]
+                                      [:input {:type "text" :name "dateofentry" :class "form-control" :id "den" :value dateofentry} ]
+                                      (if (or (nil? dateofentry) (empty? dateofentry))
+                                        (empty-dateofentry)
+                                        (try
+                                          (ftime/parse (ftime/formatter "YYYY-MM-dd") dateofentry)
+                                          [:label {:for "enr" :style "color:red"} [:b ""]]
+                                          (catch Exception e
+                                            (dateofentry-format))))
+                                      ]
+
+
+
+
+
+                                     [:input {:type  "submit"
+                                              :value "Ubaci novog clana"
+                                              :class "btn btn-success"
+                                              }]
+                                     (h "   ")
+                                     [:a {:href "/insertMember"} [:input {:type  "button"
+                                                                          :value "Resetuj  sve vrednosti"
+                                                                          :class "btn btn-warning"}]])]]]
+                       [:div {:class "col"}
+                        (if (or (nil? jmbg) (nil? name) (nil? surname) (nil? email) (nil? phone) (nil? dateofentry) (empty? jmbg) (empty? name) (empty? surname) (empty? email) (empty? phone) (empty? dateofentry) )
+                          ""
+                          (try
+                            (if (empty? (db/select-member-by-surname surname))
+                              (try
+                                (db/insert-new-member jmbg name surname email phone dateofentry)
+                                (success-insert-new-member surname)
+
+
+                                (catch Exception e
+                                  [:p {:style "color:red; border-color: #000000;"} [:b (str "Nije ubacen novi clan!!!" surname)]]
+
+                                  ))
+                              )
+
+                            (catch Exception e
+
+                              (exist-name-of-member surname)
+                              )))
+                        ]]
+                      ])
+  )
+
+(defn insert-member-page []
+  (layout/pagelayout "Biblioteka" (menu/menuapp)
+                     [:br]
+                     [:div {:class "container"}
+                      [:div {:class "row"}
+                       [:div {:class "col"}]
+                       [:div {:class "col-6"}
+                        [:h3 [:b "Unos novog autora"]]
+                        [:div {:class "tab-content"}
+                         [:div {:class "tab-pane active" :role "tabpanel"}
+                          (f/form-to [:get "/insertNewMember"]
+                                     (anti-forgery-field)
+
+                                     [:div {:class "form-group"}
+                                      [:label {:for "jm"} [:b "JMBG novog clana"]]
+                                      [:input {:type "text" :name "jmbg" :class "form-control" :id "jm"}]
+                                      ]
+
+                                     [:div {:class "form-group"}
+                                      [:label {:for "n"} [:b "Ime novog clana"]]
+                                      [:input {:type "text" :name "name" :class "form-control" :id "n"}]
+                                      ]
+
+                                     [:div {:class "form-group"}
+                                      [:label {:for "s"} [:b "Prezime novog clana"]]
+                                      [:input {:type "text" :name "surname" :class "form-control" :id "s"}]
+                                      ]
+
+                                     [:div {:class "form-group"}
+                                      [:label {:for "ml"} [:b "Email"]]
+                                      [:input {:type "email" :name "email" :class "form-control" :id "ml"}]
+
+                                      ]
+
+                                     [:div {:class "form-group"}
+                                      [:label {:for "ph"} [:b "Telefon"]]
+                                      [:input {:type "text" :name "phone" :class "form-control" :id "ph"}]
+
+                                      ]
+
+                                     [:div {:class "form-group"}
+                                      [:label {:for "den"} [:b "Datum uclanjenja"]]
+                                      [:input {:type "text" :name "dateofentry" :class "form-control" :id "den"}]
+
+                                      ]
+
+
+
+
+
+                                     [:input {:type  "submit" :read-only "false"
+                                              :value "Ubaci novog clana"
+                                              :class "btn btn-success"
+                                              }]
+                                     (h "   ")
+                                     [:input {:type  "reset"
+                                              :value "Resetuj vrednosti"
+                                              :class "btn btn-warning"
+                                              }])
+                          ]]
+
+                        ]
+                       [:div {:class "col"}]]
+                      ]
+                     )
+  )
+
 
 
 
@@ -1486,6 +2441,26 @@
            (GET "/insertAuthor" [] (insert-author-page))
            (GET "/insertNewAuthor" [name surname dateofbirth country mainbook]
              (insert-new-author-page name surname dateofbirth country mainbook))
+
+           (GET "/insertMember" [] (insert-member-page))
+           (GET "/insertNewMember" [jmbg name surname email phone  dateofentry  ]
+             (insert-new-member-page jmbg name surname email phone dateofentry ))
+
+
+           (GET "/insertNewDataMember" [] (try
+                                   (insert-data-for-member-page)
+                                   (catch Exception e
+                                     )))
+           (GET "/insertNewDataForMember" [surnamemember nameofbook dateoftake notes ]
+                                                                        (try
+                                                                       (insert-new-data-memberpage surnamemember nameofbook dateoftake notes )
+                                                                       (catch Exception e
+                                                                         )))
+
+
+
+
+
 
            (GET "/deleteAuthor/:id" [id] (try
                                          (db/delete-author id)
@@ -1511,15 +2486,30 @@
            (GET "/showAllTheBooks/:surnameAuthor" [surnameAuthor] (try (select-all-the-books surnameAuthor) (catch Exception e
                                                                                          )))
 
+           (GET "/showRecords" [] (try (select-records) (catch Exception e
+                                                      )))
+           (GET "/showAllRecords" [surnameMember] (try (select-all-records surnameMember) (catch Exception e
+                                                                                        )))
+           (GET "/showAllTheRecords/:surnameMember" [surnameMember] (try (select-all-the-records surnameMember) (catch Exception e
+                                                                                                              )))
+
+
+
+
 
            (GET "/insertBook" [] (try
                                      (insert-book)
                                      (catch Exception e
                                        )))
-           (GET "/insertNewBook" [namebook typeofbook year numberofexample author] (try
-                                                                                    (insert-new-book namebook typeofbook year numberofexample author)
+           (GET "/insertNewBook" [namebook genre year author] (try
+                                                                                    (insert-new-book namebook genre year author)
                                                                                     (catch Exception e
                                                                                       )))
+
+
+           (GET "/deleteBook" [] (try (select-books-for-delete) (catch Exception e
+                                                                      )))
+           (GET "/deleteThisBook" [namebook] (try (select-books-which-delete namebook) (catch Exception e)))
 
            (GET "/deleteBook/:id/:surnameAuthor" [id surnameAuthor] (try
                                                               (db/delete-book id)
@@ -1531,10 +2521,27 @@
                                            (update-book id)
                                            (catch Exception e
                                              )))
-           (GET "/updateThisBook/:id" [id namebook typeofbook year numberofexample author] (try
-                                                                                           (update-this-book id namebook typeofbook year numberofexample author)
+           (GET "/updateThisBook/:id" [id namebook genre year status author] (try
+                                                                                           (update-this-book id namebook genre year status author)
                                                                                            (catch Exception e
                                                                                              )))
+
+
+
+
+
+
+           (GET "/updateRecord/:publikacijaid/:jmbg" [publikacijaid jmbg] (try
+                                         (update-record publikacijaid jmbg)
+                                         (catch Exception e
+                                           )))
+           (GET "/updateThisRecord/:publikacijaid/:jmbg" [publikacijaid jmbg namebook dateoftake dateofreturn notes] (try
+                                                                               (update-this-record publikacijaid jmbg namebook dateoftake dateofreturn notes)
+                                                                               (catch Exception e
+                                                                                 )))
+
+
+
 
            (GET "/pickAuthor" [] (try
                                  (pick-this-author)
