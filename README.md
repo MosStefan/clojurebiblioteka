@@ -39,18 +39,24 @@ In database have default port:(localhost:3306/bibliteka)
 
 **Some about work application:**
 
+>This application is intended for library employees to keep records of available books, their authors, members of the library, as well as records on the books of library books borrowed.
 
->After start the application, we have three cards in *menu:* **Home page,Authors and Publication(Book)**.
+
+>After start the application, we have some cards in *menu:* **Home page,Authors,Publication(Book),Member,Promotion**.
 >>In card **Authors** we perform basic CRUD operations on the table autor in database bibliteka.
 First:**INSERT** author-we have form for entry data about new author in database bibliteka in table autor.
 Second:**SELECT** authors-display in the table all the authors from the database which order by dateofbirth
 Also we perform **UPDATE**:change data about choose author from table and save new data about this choose author in the table and database.
 Third:**DELETE** publication-we delete choose book from database.
 
->In card Publication we also perform basic CRUD operations on the table publikacija in database bibliteka.
+>In card **Publication** we also perform basic CRUD operations on the table publikacija in database bibliteka.
 >>We connect table publikacija with table autor with foreign key by autorid.
 In this menu card we can **INSERT** new book where have form for entry data about new book. In this form also we have to choose surname author for book which insert, but just authors which exists in database. Then we have **SELECT** command which display in the table all the books from the database which order by name book, but first we have field to insert surname author which books want to show.
 With **DELETE** command we delete choose book from database. At the end with **UPDATE**:change data about choose book from table and save new data about this choose book in the table and database.
+
+
+>In card **Members**, the possibility of entering and editing the data of a **new member** of the library was made possible. In addition to entering these data, an employee of the library enters information about which member has rented a book from which author (this represents an **aggregation** between a library member and a particular book). It introduces the date when a member rented a book, and the status of the book changes that it is **not available**. When a member returns a book, this is recorded in the **date of the return of the book**, where the book information is updated and it becomes **available again** so that another library member can be leased out.
+
 
 >We add new card **Promotion** where have one quiz. You have five random authors in database and you must connect **authors** with their **book** and **year of publication**. If you match all authors correct you got free month promotion.
 Also,in this card we work with pdf template **[clj-pdf "2.2.33"]** where we make pdf file like proof for this promotion.
@@ -79,6 +85,37 @@ Also,in this card we work with pdf template **[clj-pdf "2.2.33"]** where we make
                                              )))
     (catch Exception e
       (throw (Exception. e))))
+  )
+  
+  (defn update-record [publikacijaid jmbg dateoftake dateofreturn notes]
+  (j/with-db-transaction [t-con db-map]
+                         (try
+
+                           (j/db-unset-rollback-only! t-con)
+                           (j/execute! t-con
+                                       ["UPDATE evidencijaoclanu SET datumuzimanjaknjige=?, datumvracanjaknjige=?, napomena=?
+                                        WHERE publikacijaid=? AND jmbg=? " dateoftake dateofreturn notes publikacijaid jmbg]
+                                       )
+                           (catch Exception e
+                             (j/db-set-rollback-only! t-con)
+                             (throw (Exception. e))
+                             )))
+  )
+
+
+
+(defn update-name-book-for-member [nameofbook]
+  (j/with-db-transaction [t-con db-map]
+                         (try
+
+                           (j/db-unset-rollback-only! t-con)
+                           (j/execute! t-con
+                                       ["UPDATE publikacija SET status = ? WHERE idpublikacije = ?" "nije dostupna" nameofbook]
+                                       )
+                           (catch Exception e
+                             (j/db-set-rollback-only! t-con)
+                             (throw (Exception. e))
+                             )))
   )
   
   ...
